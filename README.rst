@@ -23,7 +23,7 @@ In your ``Dockerfile``, put the following code at the end::
 
 Here you need to replace ``<your kernel>`` with the name of your kernel (e.g.,
 one of ``python2``, ``python3``, or ``ir``). Note that your Dockerfile must use
-`root` as the default user.
+``root`` as the default user.
 
 Contributing
 ------------
