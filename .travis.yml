@@ -1,0 +1,39 @@
+notifications:
+  email: false
+sudo: required
+services:
+  - docker
+language: python
+python:
+  - "2.7"
+  - "3.4"
+  - "3.5"
+  - "3.6"
+install:
+  - pip install --upgrade pip setuptools
+  - pip install -r requirements.txt
+  - pip install -r dev-requirements.txt
+  - pip install .
+script:
+  - flake8 civis_jupyter_notebooks
+  - pytest -vv civis_jupyter_notebooks
+  - |
+    if [ ${TRAVIS_PYTHON_VERSION} = 3.6 ]
+    then
+        cp tests/python3/Dockerfile .
+        docker build -t py3 .
+        docker run py3 /bin/bash -c "echo BUILDS OK"
+        docker run py3 python -c "import civis"
+        docker run py3 ipython -c "%load_ext civis_jupyter_ext"
+        docker run py3 ipython -c "import funny; funny.printstr()"
+    fi
+  - |
+    if [ ${TRAVIS_PYTHON_VERSION} = 2.7 ]
+    then
+        cp tests/python2/Dockerfile .
+        docker build -t py2 .
+        docker run py2 /bin/bash -c "echo BUILDS OK"
+        docker run py2 python -c "import civis"
+        docker run py2 ipython -c "%load_ext civis_jupyter_ext"
+        docker run py2 ipython -c "import funny; funny.printstr()"
+    fi
