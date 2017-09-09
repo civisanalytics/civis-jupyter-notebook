@@ -38,7 +38,7 @@ If you would like to test our image's integration with platform locally follow t
 
 3. Build your image locally: ``docker build -t test .``
 4. Run the container: ``docker run --rm -p 8888:8888 --env-file my.env test``
-5. Access the notebook at the ip of your docker host with port 8888: ``http://localhost:8888/notebooks/notebook.ipynb``
+5. Access the notebook at the ip of your Docker host with port 8888 (e.g., ``http://localhost:8888/notebooks/notebook.ipynb``)
 
 Contributing
 ------------
