@@ -27,7 +27,7 @@ one of ``python2``, ``python3``, or ``ir``). Note that your Dockerfile must use
 
 See the `example`_ Docker image for more details.
 
-.. _example: example/README.md
+.. _example: example
 
 Integration Testing with Platform
 ---------------------------------
