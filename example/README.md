@@ -1,7 +1,13 @@
 # Example Docker Image for Civis Platform Jupyter Notebooks
 
-In order to run the example you need to have Docker installed and
-running. See their [documentation](https://docs.docker.com/engine/installation/).
+## Requirements
+
+In order to run the example, you need to have:
+
+1. Docker installed and running. See their [documentation](https://docs.docker.com/engine/installation/).
+2. Your Civis Platform API key in your environment as `${CIVIS_API_KEY}`.
+
+## Usage
 
 To run the example:
 
