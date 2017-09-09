@@ -29,8 +29,8 @@ See the `example`_ Docker image for more details.
 
 .. _example: example
 
-Integration Testing with Platform
----------------------------------
+Integration Testing with the Civis Platform
+-------------------------------------------
 
 If you would like to test your image's integration with the Civis Platform locally follow the steps below:
 
