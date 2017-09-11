@@ -13,8 +13,9 @@ In order to run the example, you need to have:
 
 To run the example:
 
-1. Clone this repo and then change to this directory: `cd civis-jupyter-notebook/example`
-2. Build the image using [build.sh](build.sh): `./build.sh`
+1. Clone this repo and then change to this directory: `cd civis-jupyter-notebook/example`.
+2. Build the image using [build.sh](build.sh): `./build.sh`.
 3. Change `<NOTEBBOK ID>` in [run.sh](run.sh) to the ID of your notebook from step 3 above.
-4. Run the Jupyter notebook server using [run.sh](run.sh): `./run.sh`
-5. Connect to the notebook at [http://localhost:8888/notebooks/notebook.ipynb](http://localhost:8888/notebooks/notebook.ipynb)
+4. Run the Jupyter notebook server using [run.sh](run.sh): `./run.sh`.
+5. Connect to the notebook at 
+   [http://localhost:8888/notebooks/notebook.ipynb](http://localhost:8888/notebooks/notebook.ipynb).
