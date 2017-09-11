@@ -1,11 +1,10 @@
 FROM python:3.6
 
-ENV SHELL=/bin/bash \
-    DEFAULT_KERNEL=python3
-
 RUN pip install civis-jupyter-notebook && \
     civis-jupyter-notebooks-install
 
+ENV DEFAULT_KERNEL=python3
 EXPOSE 8888
 WORKDIR /root/work
-CMD ["civis-jupyter-notebooks-start", "--allow-root"]
+ENTRYPOINT ["/bin/bash"] 
+CMD ["civis-jupyter-notebooks-start"]

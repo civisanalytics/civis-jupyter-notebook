@@ -11,15 +11,14 @@ Usage
 
 In your ``Dockerfile``, put the following code at the end::
 
-    ENV SHELL=/bin/bash \
-        DEFAULT_KERNEL=<your kernel>
-
     RUN pip install civis-jupyter-notebook && \
         civis-jupyter-notebooks-install
 
+    ENV DEFAULT_KERNEL=<your kernel>  # set to one of python3, python2 or ir
     EXPOSE 8888
     WORKDIR /root/work
-    CMD ["civis-jupyter-notebooks-start", "--allow-root"]
+    ENTRYPOINT ["/bin/bash"]
+    CMD ["civis-jupyter-notebooks-start"]
 
 Here you need to replace ``<your kernel>`` with the name of your kernel (e.g.,
 one of ``python2``, ``python3``, or ``ir``). Note that your Dockerfile must use

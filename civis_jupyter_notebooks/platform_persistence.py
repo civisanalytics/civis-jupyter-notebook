@@ -8,6 +8,7 @@
 import civis
 import logging
 import os
+import sys
 import requests
 from subprocess import check_call
 from subprocess import CalledProcessError
@@ -105,10 +106,19 @@ def get_client():
 
 def setup_logging():
     """ Set up log format """
-
-    logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
-    logger = logging.getLogger('file_handler')
+    logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
     logger.setLevel(logging.INFO)
+    # needed to remove duplicate log records..don't know why...
+    logger.propagate = False
+    # make sure to grab orig stderr since things seem to get redirected a bit
+    # by the notebook and/or ipython...
+    ch = logging.StreamHandler(stream=sys.__stderr__)
+    formatter = logging.Formatter(
+        fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
+        datefmt="%H:%M:%S")
+    ch.setLevel(logging.INFO)
+    ch.setFormatter(formatter)
+    logger.addHandler(ch)
     return logger
 
 
