@@ -8,7 +8,7 @@ ENV TINI_VERSION v0.16.1
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 
-ENV DEFAULT_KERNEL=python2
+ENV DEFAULT_KERNEL python2
 EXPOSE 8888
 WORKDIR /root/work
 ENTRYPOINT ["/tini", "--"]

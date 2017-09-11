@@ -19,7 +19,7 @@ In your ``Dockerfile``, put the following code at the end::
     ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
     RUN chmod +x /tini
 
-    ENV DEFAULT_KERNEL=<your kernel>  # set to one of python3, python2 or ir
+    ENV DEFAULT_KERNEL <your kernel>  # set to one of python3, python2 or ir
     EXPOSE 8888
     WORKDIR /root/work
     ENTRYPOINT ["/tini", "--"]
