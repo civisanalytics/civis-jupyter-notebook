@@ -14,10 +14,15 @@ In your ``Dockerfile``, put the following code at the end::
     RUN pip install civis-jupyter-notebook && \
         civis-jupyter-notebooks-install
 
+    # Add Tini
+    ENV TINI_VERSION v0.16.1
+    ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+    RUN chmod +x /tini
+
     ENV DEFAULT_KERNEL=<your kernel>  # set to one of python3, python2 or ir
     EXPOSE 8888
     WORKDIR /root/work
-    ENTRYPOINT ["/bin/bash", "-c"]
+    ENTRYPOINT ["/tini", "--"]
     CMD ["civis-jupyter-notebooks-start"]
 
 Here you need to replace ``<your kernel>`` with the name of your kernel (e.g.,

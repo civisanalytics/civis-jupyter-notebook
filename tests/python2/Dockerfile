@@ -3,10 +3,15 @@ FROM python:2.7
 COPY ./requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
 
+# Add Tini
+ENV TINI_VERSION v0.16.1
+ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
+RUN chmod +x /tini
+
 ENV DEFAULT_KERNEL=python2
 EXPOSE 8888
 WORKDIR /root/work
-ENTRYPOINT ["/bin/bash", "-c"]
+ENTRYPOINT ["/tini", "--"]
 CMD ["civis-jupyter-notebooks-start"]
 
 # put a requirements.txt file in the right spot to test pip installs
