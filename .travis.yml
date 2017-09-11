@@ -20,20 +20,10 @@ script:
   - |
     if [ ${TRAVIS_PYTHON_VERSION} = 3.6 ]
     then
-        cp tests/python3/Dockerfile .
-        docker build -t py3 .
-        docker run py3 /bin/bash -c "echo BUILDS OK"
-        docker run py3 python -c "import civis"
-        docker run py3 ipython -c "%load_ext civis_jupyter_ext"
-        docker run py3 ipython -c "import funny; funny.printstr()"
+        ./tests/run_docker_tests.sh tests/python3/Dockerfile
     fi
   - |
     if [ ${TRAVIS_PYTHON_VERSION} = 2.7 ]
     then
-        cp tests/python2/Dockerfile .
-        docker build -t py2 .
-        docker run py2 /bin/bash -c "echo BUILDS OK"
-        docker run py2 python -c "import civis"
-        docker run py2 ipython -c "%load_ext civis_jupyter_ext"
-        docker run py2 ipython -c "import funny; funny.printstr()"
+        ./tests/run_docker_tests.sh tests/python2/Dockerfile
     fi

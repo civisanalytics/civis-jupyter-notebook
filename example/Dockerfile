@@ -6,5 +6,5 @@ RUN pip install civis-jupyter-notebook && \
 ENV DEFAULT_KERNEL=python3
 EXPOSE 8888
 WORKDIR /root/work
-ENTRYPOINT ["/bin/bash"] 
+ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["civis-jupyter-notebooks-start"]

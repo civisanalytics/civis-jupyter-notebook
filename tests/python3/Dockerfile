@@ -6,7 +6,7 @@ RUN pip install -r /root/requirements.txt
 ENV DEFAULT_KERNEL=python3
 EXPOSE 8888
 WORKDIR /root/work
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["/bin/bash", "-c"]
 CMD ["civis-jupyter-notebooks-start"]
 
 # put a requirements.txt file in the right spot to test pip installs

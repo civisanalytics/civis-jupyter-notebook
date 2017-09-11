@@ -17,7 +17,7 @@ In your ``Dockerfile``, put the following code at the end::
     ENV DEFAULT_KERNEL=<your kernel>  # set to one of python3, python2 or ir
     EXPOSE 8888
     WORKDIR /root/work
-    ENTRYPOINT ["/bin/bash"]
+    ENTRYPOINT ["/bin/bash", "-c"]
     CMD ["civis-jupyter-notebooks-start"]
 
 Here you need to replace ``<your kernel>`` with the name of your kernel (e.g.,
