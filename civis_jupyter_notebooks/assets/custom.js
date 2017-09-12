@@ -13,6 +13,8 @@ $('#trust_notebook').hide();
 $('#file_menu .divider').each(function(i, el) { $(el).hide(); });
 $('#login_widget').hide();
 $('#header-container').hide();
+$('#kernel_menu .divider').hide();
+$('#menu-change-kernel').hide();
 
 // Disable a link back to the tree view
 $('a[title="dashboard"]').attr('href', '#');
