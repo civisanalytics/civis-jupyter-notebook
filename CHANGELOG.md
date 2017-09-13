@@ -6,9 +6,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.0] - 2017-09-13
 
-### Changed
-- `civis-jupyter-extensions` v0.1.0 -> v0.1.1
-
 ### Added
 - More documentation and an example Docker image (#2, #3, #4).
 - Cleaner Docker files for testing (#4).
