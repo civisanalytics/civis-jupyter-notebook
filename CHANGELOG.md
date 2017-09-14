@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Fixed package installs for already imported packages (#8).
+- Fixed Docker tests to make sure they fail properly (#8).
 
 ## [0.2.0] - 2017-09-13
 
