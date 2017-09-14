@@ -34,11 +34,11 @@ See the `example`_ Docker image for more details.
 .. _example: example
 
 Integration Testing with the Civis Platform
----------------------------------------------------------
+-------------------------------------------
 
 If you would like to test your image's integration with the Civis Platform locally follow the steps below:
 
-1. Create a notebook in your Civis Platform account and grab the id of the notebook. This ID is the number
+1. Create a notebook in your Civis Platform account and grab the id of the notebook. This ID is the number 
    that appears at the end of the URL for the notebook, ``https://platform.civisanalytics.com/#/notebooks/<NOTEBOOK ID>``.
 2. Create an environment file called ``my.env`` and add the following to it::
 
