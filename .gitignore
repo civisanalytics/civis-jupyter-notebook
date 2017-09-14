@@ -1,6 +1,6 @@
 .DS_Store
-Dockerfile
 my.env
+Dockerfile
 .idea
 
 __pycache__/
