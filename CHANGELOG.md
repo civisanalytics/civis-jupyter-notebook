@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unrelease]
 
+### Added
+- Scripts to make local integration testing with the Civis Platform easier (#8).
+
 ### Fixed
 - Fixed package installs for already imported packages (#8).
 
