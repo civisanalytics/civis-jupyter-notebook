@@ -9,7 +9,8 @@ set +e
     docker run img echo "BUILDS OK"
     docker run img python -c "import civis"
     docker run img ipython /root/civis-jupyter-notebooks/tests/test_ext.py
-    docker run img python -c "import funny; print(funny.printstr())"
+    # TODO - figure out how to test this without needing an API key
+    # docker run img ipython -c "import funny; print(funny.printstr())"
 )
 
 exit $?
