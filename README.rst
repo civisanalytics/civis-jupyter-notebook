@@ -33,8 +33,8 @@ See the `example`_ Docker image for more details.
 
 .. _example: example
 
-Integration Testing with the Civis Platform
--------------------------------------------
+Integration Testing Docker Images with the Civis Platform
+---------------------------------------------------------
 
 If you would like to test your image's integration with the Civis Platform locally follow the steps below:
 
@@ -49,8 +49,20 @@ If you would like to test your image's integration with the Civis Platform local
 4. Run the container: ``docker run --rm -p 8888:8888 --env-file my.env test``.
 5. Access the notebook at the ip of your Docker host with port 8888 (e.g., ``http://localhost:8888/notebooks/notebook.ipynb``).
 
+Integration Testing Code Changes with the Civis Platform
+--------------------------------------------------------
+
 The scripts ``tests/build_dev_image.sh`` and ``tests/run_dev_image.sh`` can be used to test the
-integration of changes with the Civis Platform locally as well.
+integration of coee changes with the Civis Platform.
+
+From the top directory in the repo type::
+
+    $ ./test/build_dev_image.sh
+    $ ./test/run_dev_image.sh <NOTEBOOK ID>
+
+where ``<NOTEBOOK ID>`` is the ID of a Civis Platform notebook. See step 1 above if you do not
+have a notebook ID. Then you can connect to the notebook from your local browser and check
+to make sure it is working properly.
 
 Contributing
 ------------
