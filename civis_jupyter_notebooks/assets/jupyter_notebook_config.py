@@ -1,5 +1,13 @@
+"""Jupyter configuration file
+
+Note that the code in this file gets executed in a python process that is independent
+of any python process in a kernel run by Jupyter (e.g., an ipython kernel). Thus we can make
+changes to the installed packages to use in the ipython kernel here without worrying about
+them not being reimported.
+"""
 import os
 import signal
+import pip
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
 
@@ -36,3 +44,10 @@ except NotebookManagementError as e:
 git_enabled = os.environ.get('GIT_FILE') is not None
 post_save = platform_persistence.post_save(git_enabled=git_enabled)
 c.FileContentsManager.post_save_hook = post_save
+
+REQUIREMENTS_PATH = os.path.expanduser(os.path.join('~', 'work', 'requirements.txt'))
+
+if os.path.isfile(REQUIREMENTS_PATH):
+    platform_persistence.logger.info('installing requirements.txt packages')
+    pip.main(['install', '-r', REQUIREMENTS_PATH])
+    platform_persistence.logger.info('requirements.txt installed')
