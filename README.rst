@@ -69,6 +69,17 @@ Contributing
 
 See ``CONTIBUTING.md`` for information about contributing to this project.
 
+
+Miscellany
+----------
+
+The ordering of the packages in ``requirements.txt`` seems to be important
+because of how pip processes them. In particular, ``ipywidgets`` needs to be
+after ``civis-jupyter-extensions`` to work in the
+`civis-jupyter-python2 image
+<https://github.com/civisanalytics/civis-jupyter-python2>`_.
+
+
 License
 -------
 
