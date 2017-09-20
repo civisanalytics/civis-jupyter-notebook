@@ -6,9 +6,12 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.2.2] - 2017-09-20
 
+### Added
+- Added Civis themed colors and fonts to the notebook CSS (#11).
+
 ### Changed
-- Moved to equivalent minor versions on packages civis, requests, notebook, six and civis-jupyter-extensions (#9).
-- civis-jupyter-extensions 0.1.1 -> 0.1.2 (#9).
+- Moved to equivalent minor versions on packages civis, requests, notebook, six and civis-jupyter-extensions (#12).
+- civis-jupyter-extensions 0.1.1 -> 0.1.2 (#12).
 
 ## [0.2.1] - 2017-09-18
 
