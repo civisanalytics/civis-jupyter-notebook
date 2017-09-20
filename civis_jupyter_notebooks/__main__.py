@@ -25,7 +25,8 @@ def cli():
 
     # enable civisjupyter extension
     for cmd in ['jupyter nbextension install --py civis_jupyter_ext',
-                'jupyter nbextension enable --py civis_jupyter_ext']:
+                'jupyter nbextension enable --py civis_jupyter_ext',
+                'jupyter nbextension enable --py widgetsnbextension']:
         subprocess.check_call(cmd, shell=True)
 
     # copy code
