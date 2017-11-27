@@ -91,7 +91,8 @@ def generate_and_save_preview(url, os_path):
     except CalledProcessError as e:
         raise NotebookManagementError('nbconvert failed to convert notebook file to html: {}'.format(repr(e)))
 
-    with open('notebook.html', 'rb') as preview_file:
+    preview_path = os.path.splitext(os_path)[0] + '.html'
+    with open(preview_path, 'rb') as preview_file:
         logger.info('Pushing latest notebook preview to S3')
         requests.put(url, data=preview_file.read())
         logger.info('Notebook preview updated')
