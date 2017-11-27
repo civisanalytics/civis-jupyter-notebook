@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [0.2.4] - 2017-11-28
+
 ### Fixed
 - Relax requirements to require >= minor versions, instead of == minor versions (#16).
 
