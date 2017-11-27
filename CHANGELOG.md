@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## Unreleased
+
+### Fixed
+- Relax requirements to require >= minor versions, instead of == minor versions (#16).
+
 ## [0.2.3] - 2017-11-22
 
 ### Added
