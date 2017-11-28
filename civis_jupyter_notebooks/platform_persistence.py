@@ -14,7 +14,7 @@ from subprocess import check_call
 from subprocess import CalledProcessError
 
 
-def initialize_notebook_from_platform():
+def initialize_notebook_from_platform(notebook_path):
     """ This runs on startup to initialize the notebook """
     client = get_client()
     nb = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
@@ -25,7 +25,7 @@ def initialize_notebook_from_platform():
         raise NotebookManagementError('Failed to pull down notebook file from S3')
 
     logger.info('Pulling contents of notebook file')
-    with open('notebook.ipynb', 'wb') as nb_file:
+    with open(notebook_path, 'wb') as nb_file:
         nb_file.write(r.content)
     logger.info('Notebook file ready')
 

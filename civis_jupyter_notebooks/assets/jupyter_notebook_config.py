@@ -32,8 +32,8 @@ c.NotebookApp.allow_root = True
 
 # Download notebook and initialize post-save hook
 try:
-    if not git_enabled:
-        platform_persistence.initialize_notebook_from_platform()
+    if not git_enabled or not os.path.isfile(NOTEBOOK_PATH):
+        platform_persistence.initialize_notebook_from_platform(NOTEBOOK_PATH)
     # force a save of the preview so that we have one in case
     # the user never generates one
     _, preview_url = platform_persistence.get_update_urls()
