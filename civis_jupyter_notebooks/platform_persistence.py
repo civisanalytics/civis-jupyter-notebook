@@ -24,6 +24,10 @@ def initialize_notebook_from_platform(notebook_path):
     if r.status_code != 200:
         raise NotebookManagementError('Failed to pull down notebook file from S3')
 
+    directory = os.path.dirname(notebook_path)
+    if not os.path.exists(directory):
+        os.makedirs(directory)
+
     logger.info('Pulling contents of notebook file')
     with open(notebook_path, 'wb') as nb_file:
         nb_file.write(r.content)
