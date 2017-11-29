@@ -22,7 +22,7 @@ TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
 
 
-class MyTest(unittest.TestCase):
+class PlatformPersistenceTest(unittest.TestCase):
 
     def setUp(self):
         os.environ['CIVIS_API_KEY'] = 'hi mom'

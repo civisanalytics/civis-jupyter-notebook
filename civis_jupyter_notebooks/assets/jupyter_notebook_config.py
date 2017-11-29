@@ -10,6 +10,7 @@ import signal
 import pip
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
+from civis_jupyter_notebooks.git_utils import CivisGit, GitError
 
 # Jupyter Configuration
 c = get_config() # noqa
@@ -23,20 +24,26 @@ c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
 
-git_enabled = os.environ.get('GIT_FILE') is not None
+if os.environ.get('GIT_REPO_URL'):
+    try:
+        CivisGit().clone_repository()
+    except GitError as e:
+        platform_persistence.logger.error(str(e))
+        # TODO: Have some sort of check to stop the rest of the code from executing
 
-# File paths for notebook file and requirements.txt
-REQUIREMENTS_PATH = os.path.expanduser(os.path.join('~', 'work', 'requirements.txt'))
-NOTEBOOK_PATH = os.path.join('~', 'work', 'notebook.ipynb')
-NOTEBOOK_PATH = os.path.expanduser(NOTEBOOK_PATH)
+# Set up NOTEBOOK_PATH
+NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work'))
+if os.environ.get('NOTEBOOK_FILE_PATH'):
+    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, os.environ.get('NOTEBOOK_FILE_PATH'))
+else:
+    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
 
-# Download notebook and initialize post-save hook
+# pull .ipynb file from s3 and save preview back if necessary
+# pull requirements.txt file from s3
 try:
-    if not git_enabled or not os.path.isfile(NOTEBOOK_PATH):
+    if not os.path.isfile(NOTEBOOK_PATH):
         platform_persistence.initialize_notebook_from_platform(NOTEBOOK_PATH)
 
-    # force a save of the preview so that we have one in case
-    # the user never generates one
     _, preview_url = platform_persistence.get_update_urls()
     platform_persistence.generate_and_save_preview(preview_url, NOTEBOOK_PATH)
 except NotebookManagementError as e:
@@ -44,8 +51,8 @@ except NotebookManagementError as e:
     platform_persistence.logger.warn('Killing the notebook process b/c of a startup issue')
     os.kill(os.getpid(), signal.SIGTERM)
 
-# Clone git repository
 # Install requirements.txt
+REQUIREMENTS_PATH = os.path.expanduser(os.path.join('~', 'work', 'requirements.txt'))
 if os.path.isfile(REQUIREMENTS_PATH):
     platform_persistence.logger.info('installing requirements.txt packages')
     pip.main(['install', '-r', REQUIREMENTS_PATH])
