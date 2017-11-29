@@ -86,8 +86,7 @@ class MyTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('requests.put')
     def test_post_save_fetches_urls_from_api(self, _rput, client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, '', {})
+        platform_persistence.post_save({'type': 'notebook'}, '', {})
         platform_persistence.get_client().notebooks.list_update_links.assert_called_with(TEST_PLATFORM_OBJECT_ID)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
@@ -96,19 +95,8 @@ class MyTest(unittest.TestCase):
     @patch('requests.put')
     @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
     def test_post_save_performs_two_put_operations(self, save, rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, '', {})
+        platform_persistence.post_save({'type': 'notebook'}, '', {})
         self.assertTrue(save.called)
-
-    @patch('civis_jupyter_notebooks.platform_persistence.open')
-    @patch('civis_jupyter_notebooks.platform_persistence.check_call')
-    @patch('civis.APIClient')
-    @patch('requests.put')
-    @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
-    def test_post_save_for_git_does_not_call_save_notebook(self, save, rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=True)
-        post_save({'type': 'notebook'}, '', {})
-        self.assertFalse(save.called)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.check_call')
@@ -117,8 +105,7 @@ class MyTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
     @patch('civis_jupyter_notebooks.platform_persistence.get_update_urls')
     def test_post_save_skipped_for_non_notebook_types(self, guu, save, _rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'blargggg'}, '', {})
+        platform_persistence.post_save({'type': 'blargggg'}, '', {})
         self.assertFalse(guu.called)
         self.assertFalse(save.called)
 
@@ -127,17 +114,7 @@ class MyTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('requests.put')
     def test_post_save_generates_preview(self, _rput, _client, check_call, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, 'x/y', {})
-        check_call.assert_called_with(['jupyter', 'nbconvert', '--to', 'html', 'y'], cwd='x')
-
-    @patch('civis_jupyter_notebooks.platform_persistence.open')
-    @patch('civis_jupyter_notebooks.platform_persistence.check_call')
-    @patch('civis.APIClient')
-    @patch('requests.put')
-    def test_post_save_for_git_generates_preview(self, _rput, _client, check_call, _op):
-        post_save = platform_persistence.post_save(git_enabled=True)
-        post_save({'type': 'notebook'}, 'x/y', {})
+        platform_persistence.post_save({'type': 'notebook'}, 'x/y', {})
         check_call.assert_called_with(['jupyter', 'nbconvert', '--to', 'html', 'y'], cwd='x')
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')

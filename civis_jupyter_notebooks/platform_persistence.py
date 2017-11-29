@@ -47,20 +47,16 @@ def __pull_and_load_requirements(url):
     logger.info('Requirements file ready')
 
 
-def post_save(git_enabled=False):
+def post_save(model, os_path, contents_manager):
+    """ Called from Jupyter post-save hook. Manages save of NB """
 
-    def post_save_custom(model, os_path, contents_manager):
-        """ Called from Jupyter post-save hook. Manages save of NB """
-
-        if model['type'] != 'notebook':
-            return
-        logger.info('Getting URLs to update notebook')
-        update_url, update_preview_url = get_update_urls()
-        if not git_enabled:
-            save_notebook(update_url, os_path)
-        generate_and_save_preview(update_preview_url, os_path)
-        logger.info('Notebook save complete')
-    return post_save_custom
+    if model['type'] != 'notebook':
+        return
+    logger.info('Getting URLs to update notebook')
+    update_url, update_preview_url = get_update_urls()
+    save_notebook(update_url, os_path)
+    generate_and_save_preview(update_preview_url, os_path)
+    logger.info('Notebook save complete')
 
 
 def get_update_urls():
