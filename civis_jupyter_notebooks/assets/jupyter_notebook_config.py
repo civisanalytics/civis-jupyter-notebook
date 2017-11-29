@@ -26,15 +26,18 @@ c.FileContentsManager.post_save_hook = platform_persistence.post_save
 
 if os.environ.get('GIT_REPO_URL'):
     try:
+        platform_persistence.logger.info('cloning git repository')
         CivisGit().clone_repository()
+        platform_persistence.logger.info('git repository cloned')
     except GitError as e:
         platform_persistence.logger.error(str(e))
         # TODO: Have some sort of check to stop the rest of the code from executing
 
 # Set up NOTEBOOK_PATH
 NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work'))
-if os.environ.get('NOTEBOOK_FILE_PATH'):
-    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, os.environ.get('NOTEBOOK_FILE_PATH'))
+nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH')
+if nb_file_path:
+    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, nb_file_path.strip('/'))
 else:
     NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
 
