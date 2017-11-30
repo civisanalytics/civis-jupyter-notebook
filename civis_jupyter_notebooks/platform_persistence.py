@@ -12,6 +12,7 @@ import sys
 import requests
 from subprocess import check_call
 from subprocess import CalledProcessError
+from civis_jupyter_notebooks import log_utils
 
 
 def initialize_notebook_from_platform(notebook_path):
@@ -105,24 +106,6 @@ def get_client():
     return civis.APIClient(resources='all')
 
 
-def setup_logging():
-    """ Set up log format """
-    logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
-    logger.setLevel(logging.INFO)
-    # needed to remove duplicate log records..don't know why...
-    logger.propagate = False
-    # make sure to grab orig stderr since things seem to get redirected a bit
-    # by the notebook and/or ipython...
-    ch = logging.StreamHandler(stream=sys.__stderr__)
-    formatter = logging.Formatter(
-        fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
-        datefmt="%H:%M:%S")
-    ch.setLevel(logging.INFO)
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
-    return logger
-
-
 class NotebookManagementError(Exception):
     '''
     raised whenever we hit an error trying to move
@@ -130,4 +113,4 @@ class NotebookManagementError(Exception):
     '''
 
 
-logger = setup_logging()
+logger = log_utils.setup_stream_logging()

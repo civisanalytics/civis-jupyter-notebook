@@ -2,14 +2,15 @@
 
 import os
 from civis_jupyter_notebooks.git_utils import CivisGit, GitError
-from civis_jupyter_notebooks import platform_persistence
+from civis_jupyter_notebooks import log_utils
 
+file_logger = log_utils.setup_file_logging()
+stream_logger = log_utils.setup_stream_logging()
 
 if os.environ.get('GIT_REPO_URL'):
     try:
-        platform_persistence.logger.info('cloning git repository')
+        stream_logger.info('cloning git repository')
         CivisGit().clone_repository()
-        platform_persistence.logger.info('git repository cloned')
+        stream_logger.info('clone complete')
     except GitError as e:
-        platform_persistence.logger.error(str(e))
-        # TODO: Have some sort of check to stop the rest of the code from executing
+        file_logger.error(str(e))
