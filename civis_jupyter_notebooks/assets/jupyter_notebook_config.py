@@ -8,7 +8,7 @@ them not being reimported.
 import os
 import signal
 import pip
-from civis_jupyter_notebooks import platform_persistence
+from civis_jupyter_notebooks import platform_persistence, log_utils
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
 
 # Jupyter Configuration
@@ -23,9 +23,11 @@ c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
 
-# check to see if it is git_enabled and if the error log is empty
+# if error log has entries ignore extra set up
+if log_utils.log_file_has_logs(log_utils.USER_LOGS_FILE):
+    # redirect to log file
+    return # NOQA
 
-# Set up NOTEBOOK_PATH
 NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work', 'notebook.ipynb'))
 nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH')
 if nb_file_path:

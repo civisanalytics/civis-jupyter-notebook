@@ -44,3 +44,7 @@ def setup_file_logging():
     handler.setFormatter(formatter)
     logger.addHandler(handler)
     return logger
+
+
+def log_file_has_logs(file_path):
+    return os.path.isfile(file_path) and os.path.getsize(file_path) > 0
