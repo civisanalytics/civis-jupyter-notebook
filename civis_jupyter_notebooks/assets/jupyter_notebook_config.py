@@ -23,8 +23,8 @@ c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
 c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 
-NOTEBOOK_PATH = os.path.join('~', 'work')
-REQUIREMENTS_PATH = os.path.join('~', 'work')
+NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work'))
+REQUIREMENTS_PATH = os.path.expanduser(os.path.join('~', 'work'))
 
 if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
     # redirect to log file
@@ -32,14 +32,14 @@ if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
     platform_persistence.logger.info('user visible error log file has an entry')
 
 else:
-    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
-    c.NotebookApp.default_url = '/notebooks/notebook.ipynb'
-
     nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH')
     if nb_file_path:
         nb_file_path = nb_file_path.strip('/')
-        NOTEBOOK_PATH = os.path.join('~', 'work', os.environ.get('GIT_REPO_FOLDER'), nb_file_path)
-        c.NotebookApp.default_url = '/notebooks/{}/{}'.format(os.environ.get('GIT_REPO_FOLDER'), nb_file_path)
+        NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, nb_file_path)
+        c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
+    else:
+        NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
+        c.NotebookApp.default_url = '/notebooks/notebook.ipynb'
 
     try:
         # pull .ipynb file from s3 and save preview back if necessary
