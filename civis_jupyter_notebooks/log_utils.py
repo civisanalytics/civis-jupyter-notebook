@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-USER_LOGS_FILE = os.environ.get('USER_LOG_PATH')
+USER_VISIBLE_LOGS = os.path.join('~', 'work', 'logs', 'errors.log')
 
 
 def setup_stream_logging():
@@ -24,19 +24,17 @@ def setup_stream_logging():
 
 
 def setup_file_logging():
-    directory = os.path.dirname(USER_LOGS_FILE)
+    directory = os.path.dirname(USER_VISIBLE_LOGS)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    try:
-        open(USER_LOGS_FILE, 'x')
-    except FileExistsError:
-        pass
+    # python2 and 3 compatible way of opening a file
+    open(USER_VISIBLE_LOGS, 'a').close()
 
-    logger = logging.getLogger('USER_ERROR_LOGS')
+    logger = logging.getLogger('USER_VISIBLE_LOGS')
     logger.setLevel(logging.ERROR)
     logger.propagate = False
-    handler = logging.FileHandler(USER_LOGS_FILE)
+    handler = logging.FileHandler(USER_VISIBLE_LOGS)
     formatter = logging.Formatter(
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")

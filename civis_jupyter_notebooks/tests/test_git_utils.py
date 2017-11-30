@@ -18,7 +18,7 @@ else:
     from unittest.mock import MagicMock
 
 REPO_URL = 'http://www.github.com/civisanalytics.foo.git'
-GIT_REPO_MOUNT_PATH = '/root/work/repo'
+GIT_REPO_FOLDER = 'repo'
 GIT_REPO_REF = 'master'
 
 
@@ -26,7 +26,7 @@ class GitUtilsTest(unittest.TestCase):
 
     def setUp(self):
         os.environ['GIT_REPO_URL'] = REPO_URL
-        os.environ['GIT_REPO_MOUNT_PATH'] = GIT_REPO_MOUNT_PATH
+        os.environ['GIT_REPO_FOLDER'] = GIT_REPO_FOLDER
         os.environ['GIT_REPO_REF'] = GIT_REPO_REF
         logging.disable(logging.INFO)
 
@@ -39,7 +39,9 @@ class GitUtilsTest(unittest.TestCase):
     def test_clone_repository_succeeds(self, repo_clone):
         repo_clone.return_value = MagicMock(spec=Repo)
         CivisGit().clone_repository()
-        repo_clone.assert_called_with(REPO_URL, GIT_REPO_MOUNT_PATH)
+
+        repo_mount_path = '~/work/repo'
+        repo_clone.assert_called_with(REPO_URL, repo_mount_path)
         repo_clone.return_value.git.checkout.assert_called_with(GIT_REPO_REF)
 
 
