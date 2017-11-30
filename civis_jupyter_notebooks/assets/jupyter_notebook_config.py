@@ -23,13 +23,13 @@ c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
 
+# check to see if it is git_enabled and if the error log is empty
+
 # Set up NOTEBOOK_PATH
-NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work'))
+NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work', 'notebook.ipynb'))
 nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH')
 if nb_file_path:
-    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'repo', nb_file_path.strip('/'))
-else:
-    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
+    NOTEBOOK_PATH = os.path.join(os.environ.get('GIT_REPO_MOUNT_PATH'), nb_file_path.strip('/'))
 
 # pull .ipynb file from s3 and save preview back if necessary
 # pull requirements.txt file from s3

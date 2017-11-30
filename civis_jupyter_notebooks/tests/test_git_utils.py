@@ -18,7 +18,7 @@ else:
     from unittest.mock import MagicMock
 
 REPO_URL = 'http://www.github.com/civisanalytics.foo.git'
-GIT_REPO_MOUNT_PATH = '/root/work'
+GIT_REPO_MOUNT_PATH = '/root/work/repo'
 GIT_REPO_REF = 'master'
 
 

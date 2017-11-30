@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-USER_LOGS_FILE = '/root/work/logs/errors.log'
+USER_LOGS_FILE = os.environ.get('USER_LOG_PATH')
 
 
 def setup_stream_logging():
