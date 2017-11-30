@@ -2,6 +2,8 @@
 # TODO: write conditional for setting up SSH Key
 
 if test $GIT_CREDENTIAL; then
+  git config --global core.excludesfile ~/.gitignore_global
+  echo "civis-notebook-logs.log" > ~/.gitignore_global
   # Store GIT_CREDENTIAL in the credential cache to avoid writing token to disk
   # This will only work with Github tokens!
   git config --global credential.helper 'cache --timeout=10000000'

@@ -2,7 +2,7 @@ import logging
 import os
 import sys
 
-USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'logs', 'civis.errors.log'))
+USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'civis-notebook-logs.log'))
 
 
 def setup_stream_logging():

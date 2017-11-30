@@ -28,7 +28,7 @@ REQUIREMENTS_PATH = os.path.expanduser(os.path.join('~', 'work'))
 
 if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
     # redirect to log file
-    c.NotebookApp.default_url = '/edit/logs/errors.log'
+    c.NotebookApp.default_url = '/edit/civis-notebook-logs.log'
     platform_persistence.logger.info('user visible error log file has an entry')
 
 else:

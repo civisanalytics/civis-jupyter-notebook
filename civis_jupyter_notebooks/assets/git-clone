@@ -4,7 +4,6 @@ import os
 from civis_jupyter_notebooks.git_utils import CivisGit, GitError
 from civis_jupyter_notebooks import log_utils
 
-file_logger = log_utils.setup_file_logging()
 stream_logger = log_utils.setup_stream_logging()
 
 if os.environ.get('GIT_REPO_URL'):
@@ -13,4 +12,6 @@ if os.environ.get('GIT_REPO_URL'):
         CivisGit().clone_repository()
         stream_logger.info('clone complete')
     except GitError as e:
+        # Initialize logger here so directory is empty for git clone
+        file_logger = log_utils.setup_file_logging()
         file_logger.error(str(e))
