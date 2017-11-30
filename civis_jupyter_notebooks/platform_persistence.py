@@ -6,9 +6,7 @@
   3. Custom Error class for when a Notebook does not correctly initialize
 """
 import civis
-import logging
 import os
-import sys
 import requests
 from subprocess import check_call
 from subprocess import CalledProcessError
