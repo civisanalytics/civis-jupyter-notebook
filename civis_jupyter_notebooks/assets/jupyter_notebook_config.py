@@ -27,7 +27,7 @@ c.FileContentsManager.post_save_hook = platform_persistence.post_save
 NOTEBOOK_PATH = os.path.expanduser(os.path.join('~', 'work'))
 nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH')
 if nb_file_path:
-    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, nb_file_path.strip('/'))
+    NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'repo', nb_file_path.strip('/'))
 else:
     NOTEBOOK_PATH = os.path.join(NOTEBOOK_PATH, 'notebook.ipynb')
 
