@@ -25,7 +25,8 @@ setup(
     install_requires=read('requirements.txt').strip().split('\n'),
     scripts=[
         'civis_jupyter_notebooks/assets/civis-jupyter-notebooks-start',
-        'civis_jupyter_notebooks/assets/git-init'
+        'civis_jupyter_notebooks/assets/git-init',
+        'civis_jupyter_notebooks/assets/git-clone'
     ],
     entry_points={
         'console_scripts': [
