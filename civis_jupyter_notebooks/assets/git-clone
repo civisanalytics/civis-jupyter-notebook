@@ -1,0 +1,8 @@
+#!/bin/bash
+
+# Attempt a shallow clone to start.  If a commit hash is specified as the repo ref, this will fail and we need to do a full clone instead.
+if ! git clone "$GIT_REPO_URL" --depth=1 --branch "$GIT_REPO_REF" "$GIT_REPO_MOUNT_PATH"; then
+  git clone "$GIT_REPO_URL" "$GIT_REPO_MOUNT_PATH"
+  cd "$GIT_REPO_MOUNT_PATH"
+  git checkout "$GIT_REPO_REF"
+fi

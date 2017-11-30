@@ -14,7 +14,7 @@ from subprocess import check_call
 from subprocess import CalledProcessError
 
 
-def initialize_notebook_from_platform():
+def initialize_notebook_from_platform(notebook_path):
     """ This runs on startup to initialize the notebook """
     client = get_client()
     nb = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
@@ -25,7 +25,7 @@ def initialize_notebook_from_platform():
         raise NotebookManagementError('Failed to pull down notebook file from S3')
 
     logger.info('Pulling contents of notebook file')
-    with open('notebook.ipynb', 'wb') as nb_file:
+    with open(notebook_path, 'wb') as nb_file:
         nb_file.write(r.content)
     logger.info('Notebook file ready')
 
@@ -91,7 +91,8 @@ def generate_and_save_preview(url, os_path):
     except CalledProcessError as e:
         raise NotebookManagementError('nbconvert failed to convert notebook file to html: {}'.format(repr(e)))
 
-    with open('notebook.html', 'rb') as preview_file:
+    preview_path = os.path.splitext(os_path)[0] + '.html'
+    with open(preview_path, 'rb') as preview_file:
         logger.info('Pushing latest notebook preview to S3')
         requests.put(url, data=preview_file.read())
         logger.info('Notebook preview updated')

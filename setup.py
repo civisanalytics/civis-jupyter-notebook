@@ -23,7 +23,11 @@ setup(
     include_package_data=True,
     license="BSD-3",
     install_requires=read('requirements.txt').strip().split('\n'),
-    scripts=['civis_jupyter_notebooks/assets/civis-jupyter-notebooks-start'],
+    scripts=[
+        'civis_jupyter_notebooks/assets/civis-jupyter-notebooks-start',
+        'civis_jupyter_notebooks/assets/git-init',
+        'civis_jupyter_notebooks/assets/git-clone'
+    ],
     entry_points={
         'console_scripts': [
             'civis-jupyter-notebooks-install = '

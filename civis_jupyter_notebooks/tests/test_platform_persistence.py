@@ -18,6 +18,7 @@ else:
     from unittest.mock import patch
     from unittest.mock import MagicMock
 
+TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
 
 
@@ -34,7 +35,7 @@ class MyTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_get_nb_from_platform(self, rg, _client, _op):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
-        platform_persistence.initialize_notebook_from_platform()
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         platform_persistence.get_client().notebooks.get.assert_called_with(TEST_PLATFORM_OBJECT_ID)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
@@ -46,7 +47,7 @@ class MyTest(unittest.TestCase):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.get_client().notebooks.get.return_value.notebook_url = url
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
-        platform_persistence.initialize_notebook_from_platform()
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         rg.assert_called_with(url)
         requirements.assert_not_called()
 
@@ -56,7 +57,7 @@ class MyTest(unittest.TestCase):
     def test_initialize_notebook_will_throw_error_on_nb_pull(self, rg, _client, _op):
         rg.return_value = MagicMock(spec=requests.Response, status_code=500, response={})
         self.assertRaises(NotebookManagementError,
-                          lambda: platform_persistence.initialize_notebook_from_platform())
+                          lambda: platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH))
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
@@ -66,7 +67,7 @@ class MyTest(unittest.TestCase):
         url = 'http://whatever'
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
-        platform_persistence.initialize_notebook_from_platform()
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         requirements.assert_called_with(url)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
@@ -78,7 +79,7 @@ class MyTest(unittest.TestCase):
         rg.return_value = MagicMock(spec=requests.Response, status_code=500, response={})
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
         self.assertRaises(NotebookManagementError,
-                          lambda: platform_persistence.initialize_notebook_from_platform())
+                          lambda: platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH))
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.check_call')
