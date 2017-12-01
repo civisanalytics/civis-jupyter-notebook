@@ -18,6 +18,7 @@ else:
     from unittest.mock import MagicMock
 
 REPO_URL = 'http://www.github.com/civisanalytics.foo.git'
+REPO_MOUNT_PATH = '/root/work'
 GIT_REPO_REF = 'master'
 
 
@@ -36,10 +37,9 @@ class GitUtilsTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.git_utils.Repo.clone_from')
     def test_clone_repository_succeeds(self, repo_clone):
         repo_clone.return_value = MagicMock(spec=Repo)
-        CivisGit().clone_repository()
+        CivisGit(repo_mount_path=REPO_MOUNT_PATH).clone_repository()
 
-        repo_mount_path = '/root/work/'
-        repo_clone.assert_called_with(REPO_URL, repo_mount_path)
+        repo_clone.assert_called_with(REPO_URL, REPO_MOUNT_PATH)
         repo_clone.return_value.git.checkout.assert_called_with(GIT_REPO_REF)
 
 
