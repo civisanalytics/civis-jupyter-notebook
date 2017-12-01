@@ -14,10 +14,10 @@ class CivisGit():
             repo = Repo.clone_from(self.repo_url, self.git_repo_mount_path)
             repo.git.checkout(self.git_repo_ref)
         except GitCommandError as e:
-            raise GitError(e)
+            raise CivisGitError(e)
 
 
-class GitError(Exception):
-    '''
+class CivisGitError(Exception):
+    """
     General error raised whenever a Git related error comes up
-    '''
+    """

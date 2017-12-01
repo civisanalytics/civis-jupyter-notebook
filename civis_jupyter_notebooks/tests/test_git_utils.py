@@ -7,7 +7,7 @@ import platform
 
 from git.exc import GitCommandError
 from git import Repo
-from civis_jupyter_notebooks.git_utils import CivisGit, GitError
+from civis_jupyter_notebooks.git_utils import CivisGit, CivisGitError
 
 if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
         == pkg_resources.parse_version('3.4')):
@@ -32,7 +32,7 @@ class GitUtilsTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.git_utils.Repo.clone_from')
     def test_clone_repository_throws_error(self, repo_clone):
         repo_clone.side_effect = GitCommandError('clone', 'failed')
-        self.assertRaises(GitError, lambda: CivisGit().clone_repository())
+        self.assertRaises(CivisGitError, lambda: CivisGit().clone_repository())
 
     @patch('civis_jupyter_notebooks.git_utils.Repo.clone_from')
     def test_clone_repository_succeeds(self, repo_clone):
