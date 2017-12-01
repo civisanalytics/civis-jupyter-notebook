@@ -5,6 +5,8 @@ if test $GIT_CREDENTIAL; then
   # Store GIT_CREDENTIAL in the credential cache to avoid writing token to disk
   # This will only work with Github tokens!
   git config --global credential.helper 'cache --timeout=10000000'
+  git config --global user.name $USER_NAME
+  git config --global user.email $USER_EMAIL
   git credential approve <<EOF
 protocol=https
 host=github.com
