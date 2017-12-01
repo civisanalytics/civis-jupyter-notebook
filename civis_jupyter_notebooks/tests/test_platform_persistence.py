@@ -22,7 +22,7 @@ TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
 
 
-class MyTest(unittest.TestCase):
+class PlatformPersistenceTest(unittest.TestCase):
 
     def setUp(self):
         os.environ['CIVIS_API_KEY'] = 'hi mom'
@@ -30,19 +30,21 @@ class MyTest(unittest.TestCase):
 
         logging.disable(logging.INFO)
 
+    @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_get_nb_from_platform(self, rg, _client, _op):
+    def test_initialize_notebook_will_get_nb_from_platform(self, rg, _client, _op, _makedirs):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         platform_persistence.get_client().notebooks.get.assert_called_with(TEST_PLATFORM_OBJECT_ID)
 
+    @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_pull_nb_from_url(self, rg, _client, requirements, _op):
+    def test_initialize_notebook_will_pull_nb_from_url(self, rg, _client, requirements, _op, _makedirs):
         url = 'http://whatever'
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.get_client().notebooks.get.return_value.notebook_url = url
@@ -60,21 +62,33 @@ class MyTest(unittest.TestCase):
                           lambda: platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH))
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
+    @patch('civis.APIClient')
+    @patch('os.makedirs')
+    @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
+    def test_initialize_notebook_will_create_directories_if_needed(self, rg, makedirs, _client, _op):
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
+        directory = os.path.dirname(TEST_NOTEBOOK_PATH)
+        makedirs.assert_called_with(directory)
+
+    @patch('os.makedirs')
+    @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_pull_requirements(self, rg, _client, requirements, _op):
+    def test_initialize_notebook_will_pull_requirements(self, rg, _client, requirements, _op, _makedirs):
         url = 'http://whatever'
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         requirements.assert_called_with(url)
 
+    @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_error_on_requirements_pull(self, rg, _client, _requirements, _op):
+    def test_initialize_notebook_will_error_on_requirements_pull(self, rg, _client, _requirements, _op, _makedirs):
         url = 'http://whatever'
         rg.return_value = MagicMock(spec=requests.Response, status_code=500, response={})
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
@@ -86,8 +100,7 @@ class MyTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('requests.put')
     def test_post_save_fetches_urls_from_api(self, _rput, client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, '', {})
+        platform_persistence.post_save({'type': 'notebook'}, '', {})
         platform_persistence.get_client().notebooks.list_update_links.assert_called_with(TEST_PLATFORM_OBJECT_ID)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
@@ -96,19 +109,8 @@ class MyTest(unittest.TestCase):
     @patch('requests.put')
     @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
     def test_post_save_performs_two_put_operations(self, save, rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, '', {})
+        platform_persistence.post_save({'type': 'notebook'}, '', {})
         self.assertTrue(save.called)
-
-    @patch('civis_jupyter_notebooks.platform_persistence.open')
-    @patch('civis_jupyter_notebooks.platform_persistence.check_call')
-    @patch('civis.APIClient')
-    @patch('requests.put')
-    @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
-    def test_post_save_for_git_does_not_call_save_notebook(self, save, rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=True)
-        post_save({'type': 'notebook'}, '', {})
-        self.assertFalse(save.called)
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis_jupyter_notebooks.platform_persistence.check_call')
@@ -117,8 +119,7 @@ class MyTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.save_notebook')
     @patch('civis_jupyter_notebooks.platform_persistence.get_update_urls')
     def test_post_save_skipped_for_non_notebook_types(self, guu, save, _rput, _client, _ccc, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'blargggg'}, '', {})
+        platform_persistence.post_save({'type': 'blargggg'}, '', {})
         self.assertFalse(guu.called)
         self.assertFalse(save.called)
 
@@ -127,17 +128,7 @@ class MyTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('requests.put')
     def test_post_save_generates_preview(self, _rput, _client, check_call, _op):
-        post_save = platform_persistence.post_save(git_enabled=False)
-        post_save({'type': 'notebook'}, 'x/y', {})
-        check_call.assert_called_with(['jupyter', 'nbconvert', '--to', 'html', 'y'], cwd='x')
-
-    @patch('civis_jupyter_notebooks.platform_persistence.open')
-    @patch('civis_jupyter_notebooks.platform_persistence.check_call')
-    @patch('civis.APIClient')
-    @patch('requests.put')
-    def test_post_save_for_git_generates_preview(self, _rput, _client, check_call, _op):
-        post_save = platform_persistence.post_save(git_enabled=True)
-        post_save({'type': 'notebook'}, 'x/y', {})
+        platform_persistence.post_save({'type': 'notebook'}, 'x/y', {})
         check_call.assert_called_with(['jupyter', 'nbconvert', '--to', 'html', 'y'], cwd='x')
 
     @patch('civis_jupyter_notebooks.platform_persistence.open')
