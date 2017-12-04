@@ -30,11 +30,12 @@ if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
     c.NotebookApp.default_url = '/edit/civis-notebook-logs.log'
 else:
     nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
+    prefer_platform_notebook = bool(os.environ.get('PREFER_PLATFORM_NOTEBOOK', False))
     notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
     c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
     try:
-        if not os.path.isfile(notebook_full_path):
+        if prefer_platform_notebook or not os.path.isfile(notebook_full_path):
             platform_persistence.initialize_notebook_from_platform(notebook_full_path)
         platform_persistence.post_save({'type': 'notebook'}, notebook_full_path, None)
     except NotebookManagementError as e:
