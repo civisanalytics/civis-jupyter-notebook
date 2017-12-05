@@ -27,19 +27,22 @@ c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 LOG_URL = '/edit/civis-notebook-logs.log'
 
-success = True
 if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
     # redirect to log file
     c.NotebookApp.default_url = LOG_URL
-    success = False
 else:
     nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
     notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
+    c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
     try:
         # pull .ipynb and requirements.txt file from s3
         if not os.path.isfile(notebook_full_path):
             platform_persistence.initialize_notebook_from_platform(notebook_full_path)
+
+        # save preview back if necessary
+        _, preview_url = platform_persistence.get_update_urls()
+        platform_persistence.generate_and_save_preview(preview_url, notebook_full_path)
 
     except NotebookManagementError as e:
         platform_persistence.logger.error(str(e))
@@ -68,22 +71,7 @@ else:
                     f.write(error_msg)
                 platform_persistence.logger.info('Setting NotebookApp.default_url to %s' % LOG_URL)
                 c.NotebookApp.default_url = LOG_URL
-                success = False
             break
 
         else:
             requirements_path = os.path.dirname(requirements_path)
-
-
-# success actions
-if success:
-    platform_persistence.logger.info('Successful setup')
-    try:
-        c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
-        _, preview_url = platform_persistence.get_update_urls()
-        platform_persistence.generate_and_save_preview(preview_url, notebook_full_path)
-
-    except NotebookManagementError as e:
-        platform_persistence.logger.error(str(e))
-        platform_persistence.logger.warn('Killing the notebook process b/c of a startup issue')
-        os.kill(os.getpid(), signal.SIGTERM)
