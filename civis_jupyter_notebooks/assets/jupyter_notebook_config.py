@@ -61,7 +61,8 @@ else:
                 platform_persistence.logger.info('requirements.txt installed')
             except subprocess.CalledProcessError as e:
                 # redirect to log file if pip fails
-                error_msg = "Unable to install requirements.txt, error code %d:\n" % (e.returncode) + e.output
+                error_msg = "Unable to install requirements.txt, error code %d:\n" % (e.returncode) + \
+                    e.output.decode("utf-8")
                 platform_persistence.logger.info(error_msg)
                 with open(os.path.join(ROOT_DIR, 'civis-notebook-logs.log'), 'w') as f:
                     f.write(error_msg)
