@@ -19,9 +19,10 @@ c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.token = ''
 c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
+c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
+c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
-c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 

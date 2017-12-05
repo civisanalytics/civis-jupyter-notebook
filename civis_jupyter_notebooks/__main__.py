@@ -16,6 +16,7 @@ def cli():
     # make home areas and dirs
     for dr in [('~', 'work'),
                ('~', '.jupyter', 'custom'),
+               ('~', '.jupyter', 'custom', 'fonts'),
                ('~', '.ipython', 'profile_default')]:
         try:
             os.makedirs(os.path.expanduser(os.path.join(*dr)))
@@ -32,8 +33,12 @@ def cli():
         src = pkg_resources.resource_filename(__name__, os.path.join(*src))
         dst = os.path.expanduser(os.path.join(*dst))
         shutil.copy(src, dst)
+
     _copy(('assets', 'jupyter_notebook_config.py'), ('~', '.jupyter'))
     _copy(('assets', 'custom.css'), ('~', '.jupyter', 'custom'))
     _copy(('assets', 'custom.js'), ('~', '.jupyter', 'custom'))
+    for ext in ['eot', 'woff', 'svg', 'ttf']:
+        _copy(('assets', 'fonts', 'civicons.%s' % ext), ('~', '.jupyter', 'custom', 'fonts'))
+    _copy(('assets', '.bashrc'), ('~'))
     _copy(('assets', 'ipython_config.py'), ('~', '.ipython', 'profile_default'))
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
