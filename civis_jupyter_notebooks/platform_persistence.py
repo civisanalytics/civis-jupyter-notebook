@@ -34,6 +34,7 @@ def initialize_notebook_from_platform(notebook_path):
     # the S3 version is not the brand new empty template
     git_notebook_exists = os.path.isfile(notebook_path)
     if not git_notebook_exists or not notebook_from_s3_is_new:
+        logger.info('Restoring notebook file from S3')
         directory = os.path.dirname(notebook_path)
         if not os.path.exists(directory):
             os.makedirs(directory)
