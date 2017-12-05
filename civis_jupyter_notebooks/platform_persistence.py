@@ -6,6 +6,7 @@
   3. Custom Error class for when a Notebook does not correctly initialize
 """
 import civis
+import nbformat
 import os
 import requests
 from subprocess import check_call
@@ -15,25 +16,35 @@ from civis_jupyter_notebooks import log_utils
 
 def initialize_notebook_from_platform(notebook_path):
     """ This runs on startup to initialize the notebook """
-    client = get_client()
-    nb = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
-
     logger.info('Getting URL for notebook file')
-    r = requests.get(nb.notebook_url)
+    client = get_client()
+    notebook_model = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
+
+    logger.info('Pulling contents of notebook file from S3')
+    r = requests.get(notebook_model.notebook_url)
     if r.status_code != 200:
         raise NotebookManagementError('Failed to pull down notebook file from S3')
+    notebook = nbformat.reads(r.content, nbformat.NO_CONVERT)
 
-    directory = os.path.dirname(notebook_path)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
+    notebook_from_s3_is_new = notebook.get('metadata', {}).get('civis', {}).get('new_notebook', False)
+    if notebook_from_s3_is_new:
+        notebook.metadata.civis.new_notebook = False
 
-    logger.info('Pulling contents of notebook file')
-    with open(notebook_path, 'wb') as nb_file:
-        nb_file.write(r.content)
+    # Only overwrite the git version of the notebook with the S3 version if
+    # the S3 version is not the brand new empty template
+    git_notebook_exists = os.path.isfile(notebook_path)
+    if not git_notebook_exists or not notebook_from_s3_is_new:
+        directory = os.path.dirname(notebook_path)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        with open(notebook_path, 'w') as nb_file:
+            nbformat.write(notebook, nb_file)
+
     logger.info('Notebook file ready')
 
-    if hasattr(nb, 'requirements_url') and nb.requirements_url:
-        __pull_and_load_requirements(nb.requirements_url)
+    if hasattr(notebook_model, 'requirements_url') and notebook_model.requirements_url:
+        __pull_and_load_requirements(notebook_model.requirements_url)
 
 
 def __pull_and_load_requirements(url):
