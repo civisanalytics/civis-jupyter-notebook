@@ -18,17 +18,8 @@ LOG_URL = '/edit/civis-notebook-logs.log'
 
 def get_notebook(notebook_full_path):
     try:
-        # pull .ipynb and requirements.txt file from s3
-        platform_persistence.initialize_notebook_from_platform(
-                notebook_full_path,
-                pullNotebook=(not os.path.isfile(notebook_full_path)),
-                pullRequirements=True
-                )
-
-        # save preview back if necessary
-        _, preview_url = platform_persistence.get_update_urls()
-        platform_persistence.generate_and_save_preview(preview_url, notebook_full_path)
-
+        platform_persistence.initialize_notebook_from_platform(notebook_full_path)
+        platform_persistence.post_save({'type': 'notebook'}, notebook_full_path, None)
     except NotebookManagementError as e:
         platform_persistence.logger.error(str(e))
         platform_persistence.logger.warn('Killing the notebook process b/c of a startup issue')
