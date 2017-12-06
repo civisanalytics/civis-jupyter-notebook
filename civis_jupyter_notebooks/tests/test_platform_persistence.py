@@ -53,10 +53,25 @@ class PlatformPersistenceTest(unittest.TestCase):
         rg.assert_called_with(url)
         requirements.assert_not_called()
 
+    @patch('os.makedirs')
+    @patch('civis_jupyter_notebooks.platform_persistence.open')
+    @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
+    @patch('civis.APIClient')
+    @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
+    def test_initialize_notebook_will_skip_nb_pull(self, rg, _client, requirements, _op, _makedirs):
+        url = 'http://whatever'
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
+        platform_persistence.get_client().notebooks.get.return_value.notebook_url = url
+        platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH, pullNotebook=False)
+        rg.assert_not_called()
+        requirements.assert_not_called()
+
+    @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_throw_error_on_nb_pull(self, rg, _client, _op):
+    def test_initialize_notebook_will_throw_error_on_nb_pull(self, rg, _client, _op, _makedirs):
         rg.return_value = MagicMock(spec=requests.Response, status_code=500, response={})
         self.assertRaises(NotebookManagementError,
                           lambda: platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH))
@@ -81,7 +96,19 @@ class PlatformPersistenceTest(unittest.TestCase):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
-        requirements.assert_called_with(url)
+        requirements.assert_called_with(url, TEST_NOTEBOOK_PATH)
+
+    @patch('os.makedirs')
+    @patch('civis_jupyter_notebooks.platform_persistence.open')
+    @patch('civis_jupyter_notebooks.platform_persistence.__pull_and_load_requirements')
+    @patch('civis.APIClient')
+    @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
+    def test_initialize_notebook_will_skip_requirements(self, rg, _client, requirements, _op, _makedirs):
+        url = 'http://whatever'
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, response={})
+        platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
+        platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH, pullRequirements=False)
+        requirements.assert_not_called()
 
     @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')

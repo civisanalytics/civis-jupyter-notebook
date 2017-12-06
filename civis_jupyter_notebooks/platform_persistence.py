@@ -18,16 +18,16 @@ def initialize_notebook_from_platform(notebook_path, pullNotebook=True, pullRequ
     client = get_client()
     nb = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
 
-    logger.info('Getting URL for notebook file')
-    r = requests.get(nb.notebook_url)
-    if r.status_code != 200:
-        raise NotebookManagementError('Failed to pull down notebook file from S3')
-
     directory = os.path.dirname(notebook_path)
     if not os.path.exists(directory):
         os.makedirs(directory)
 
     if pullNotebook:
+        logger.info('Getting notebook file')
+        r = requests.get(nb.notebook_url)
+        if r.status_code != 200:
+            raise NotebookManagementError('Failed to pull down notebook file from S3')
+
         logger.info('Pulling contents of notebook file')
         with open(notebook_path, 'wb') as nb_file:
             nb_file.write(r.content)
