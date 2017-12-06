@@ -19,6 +19,8 @@ else:
 
 TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
+SAMPLE_NOTEBOOK = open(os.path.join(os.path.dirname(__file__), 'fixtures/sample_notebook.ipynb')).read()
+SAMPLE_NEW_NOTEBOOK = open(os.path.join(os.path.dirname(__file__), 'fixtures/sample_new_notebook.ipynb')).read()
 
 
 class NotebookWithoutNewFlag(nbformat.NotebookNode):
@@ -28,11 +30,6 @@ class NotebookWithoutNewFlag(nbformat.NotebookNode):
 
 
 class PlatformPersistenceTest(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.sample_notebook = open('fixtures/sample_notebook.ipynb').read()
-        cls.sample_new_notebook = open('fixtures/sample_new_notebook.ipynb').read()
-
     def setUp(self):
         os.environ['CIVIS_API_KEY'] = 'hi mom'
         os.environ['PLATFORM_OBJECT_ID'] = TEST_PLATFORM_OBJECT_ID
@@ -44,7 +41,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_get_nb_from_platform(self, rg, _client, _op, _makedirs):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         platform_persistence.get_client().notebooks.get.assert_called_with(TEST_PLATFORM_OBJECT_ID)
 
@@ -55,7 +52,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_pull_nb_from_url(self, rg, _client, requirements, _op, _makedirs):
         url = 'http://whatever'
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebook_url = url
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
@@ -76,7 +73,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_set_new_notebook_flag_to_false(self, rg, _client, _op, _makedirs, nbwrite):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_new_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NEW_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebooks_url = 'something'
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
@@ -89,7 +86,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_use_s3_notebook_if_not_new_and_git_notebook_exists(self, rg, _client, _op, _makedirs, nbwrite, isfile):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebooks_url = 'something'
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         isfile.return_value = True
@@ -103,7 +100,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_discard_s3_notebook_if_new_and_git_notebook_exists(self, rg, _client, _op, _makedirs, nbwrite, isfile):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_new_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NEW_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebooks_url = 'something'
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         isfile.return_value = True
@@ -115,7 +112,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_create_directories_if_needed(self, rg, makedirs, _client, _op):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         directory = os.path.dirname(TEST_NOTEBOOK_PATH)
         makedirs.assert_called_with(directory)
@@ -127,7 +124,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
     def test_initialize_notebook_will_pull_requirements(self, rg, _client, requirements, _op, _makedirs):
         url = 'http://whatever'
-        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=self.sample_notebook)
+        rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
         requirements.assert_called_with(url)
