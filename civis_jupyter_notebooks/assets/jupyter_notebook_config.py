@@ -12,29 +12,11 @@ import subprocess
 from civis_jupyter_notebooks import platform_persistence, log_utils
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
 
-# Jupyter Configuration
-c = get_config() # noqa
-c.NotebookApp.ip = '*'
-c.NotebookApp.allow_origin = '*'
-c.NotebookApp.port = 8888
-c.NotebookApp.open_browser = False
-c.NotebookApp.token = ''
-c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
-c.NotebookApp.allow_root = True
-c.FileContentsManager.post_save_hook = platform_persistence.post_save
-c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
-
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 LOG_URL = '/edit/civis-notebook-logs.log'
 
-if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
-    # redirect to log file
-    c.NotebookApp.default_url = LOG_URL
-else:
-    nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
-    notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
-    c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
+def get_notebook(notebook_full_path):
     try:
         # pull .ipynb and requirements.txt file from s3
         platform_persistence.initialize_notebook_from_platform(
@@ -52,8 +34,8 @@ else:
         platform_persistence.logger.warn('Killing the notebook process b/c of a startup issue')
         os.kill(os.getpid(), signal.SIGTERM)
 
-    # Install requirements.txt
-    requirements_path = os.path.dirname(notebook_full_path)
+
+def install_requirements(requirements_path, c):
     while os.path.isdir(requirements_path):
         requirements_file = os.path.join(requirements_path, 'requirements.txt')
         platform_persistence.logger.info('Looking for requirements at %s' % requirements_file)
@@ -78,3 +60,40 @@ else:
 
         else:
             requirements_path = os.path.dirname(requirements_path)
+
+
+def config_jupyter():
+    # Jupyter Configuration
+    c = get_config() # noqa
+    c.NotebookApp.ip = '*'
+    c.NotebookApp.allow_origin = '*'
+    c.NotebookApp.port = 8888
+    c.NotebookApp.open_browser = False
+    c.NotebookApp.token = ''
+    c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
+    c.NotebookApp.allow_root = True
+    c.FileContentsManager.post_save_hook = platform_persistence.post_save
+    c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
+    return c
+
+
+def main():
+    c = config_jupyter()
+
+    if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
+        # redirect to log file
+        c.NotebookApp.default_url = LOG_URL
+    else:
+        nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
+        notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
+        c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
+
+        get_notebook(notebook_full_path)
+
+        requirements_path = os.path.dirname(notebook_full_path)
+        install_requirements(requirements_path, c)
+
+
+if __name__ == '__main__':
+    # execute only if run as the entry point into the program
+    main()
