@@ -37,8 +37,11 @@ else:
 
     try:
         # pull .ipynb and requirements.txt file from s3
-        if not os.path.isfile(notebook_full_path):
-            platform_persistence.initialize_notebook_from_platform(notebook_full_path)
+        platform_persistence.initialize_notebook_from_platform(
+                notebook_full_path,
+                pullNotebook=(not os.path.isfile(notebook_full_path)),
+                pullRequirements=True
+                )
 
         # save preview back if necessary
         _, preview_url = platform_persistence.get_update_urls()

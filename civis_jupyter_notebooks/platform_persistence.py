@@ -13,7 +13,7 @@ from subprocess import CalledProcessError
 from civis_jupyter_notebooks import log_utils
 
 
-def initialize_notebook_from_platform(notebook_path):
+def initialize_notebook_from_platform(notebook_path, pullNotebook=True, pullRequirements=True):
     """ This runs on startup to initialize the notebook """
     client = get_client()
     nb = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
@@ -27,16 +27,17 @@ def initialize_notebook_from_platform(notebook_path):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
-    logger.info('Pulling contents of notebook file')
-    with open(notebook_path, 'wb') as nb_file:
-        nb_file.write(r.content)
-    logger.info('Notebook file ready')
+    if pullNotebook:
+        logger.info('Pulling contents of notebook file')
+        with open(notebook_path, 'wb') as nb_file:
+            nb_file.write(r.content)
+        logger.info('Notebook file ready')
 
-    if hasattr(nb, 'requirements_url') and nb.requirements_url:
-        __pull_and_load_requirements(nb.requirements_url)
+    if pullRequirements and hasattr(nb, 'requirements_url') and nb.requirements_url:
+        __pull_and_load_requirements(nb.requirements_url, notebook_path)
 
 
-def __pull_and_load_requirements(url):
+def __pull_and_load_requirements(url, notebook_path):
     logger.info('Pulling down the requirements file')
     r = requests.get(url)
 
@@ -44,7 +45,8 @@ def __pull_and_load_requirements(url):
         raise NotebookManagementError('Failed to pull down requirements.txt file from S3')
 
     logger.info('Writing contents of requirements file')
-    with open('requirements.txt', 'wb') as requirements:
+    requirements_path = os.path.join(os.path.dirname(notebook_path), 'requirements.txt')
+    with open(requirements_path, 'wb') as requirements:
         requirements.write(r.content)
 
     logger.info('Requirements file ready')
