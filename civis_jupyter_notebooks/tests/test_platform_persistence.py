@@ -85,7 +85,8 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_use_s3_notebook_if_not_new_and_git_notebook_exists(self, rg, _client, _op, _makedirs, nbwrite, isfile):
+    def test_initialize_notebook_will_use_s3_notebook_if_not_new_and_git_notebook_exists(self, rg, _client, _op,
+                                                                                         _makedirs, nbwrite, isfile):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebooks_url = 'something'
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
@@ -99,7 +100,8 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_discard_s3_notebook_if_new_and_git_notebook_exists(self, rg, _client, _op, _makedirs, nbwrite, isfile):
+    def test_initialize_notebook_will_discard_s3_notebook_if_new_and_git_notebook_exists(self, rg, _client, _op,
+                                                                                         _makedirs, nbwrite, isfile):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NEW_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.notebooks_url = 'something'
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
