@@ -16,7 +16,7 @@ from civis_jupyter_notebooks import log_utils
 
 def initialize_notebook_from_platform(notebook_path):
     """ This runs on startup to initialize the notebook """
-    logger.info('Getting URL for notebook file')
+    logger.info('Retrieving notebook information from Platform')
     client = get_client()
     notebook_model = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
 
@@ -26,14 +26,14 @@ def initialize_notebook_from_platform(notebook_path):
         raise NotebookManagementError('Failed to pull down notebook file from S3')
     notebook = nbformat.reads(r.content, nbformat.NO_CONVERT)
 
-    notebook_from_s3_is_new = notebook.get('metadata', {}).get('civis', {}).get('new_notebook', False)
-    if notebook_from_s3_is_new:
-        notebook.metadata.civis.new_notebook = False
+    s3_notebook_new = notebook.get('metadata', {}).get('civis', {}).get('new_notebook', False)
+    if s3_notebook_new:
+        notebook.metadata.pop('civis')
 
     # Only overwrite the git version of the notebook with the S3 version if
     # the S3 version is not the brand new empty template
     git_notebook_exists = os.path.isfile(notebook_path)
-    if not git_notebook_exists or not notebook_from_s3_is_new:
+    if not git_notebook_exists or not s3_notebook_new:
         logger.info('Restoring notebook file from S3')
         directory = os.path.dirname(notebook_path)
         if not os.path.exists(directory):
