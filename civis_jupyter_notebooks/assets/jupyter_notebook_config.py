@@ -7,8 +7,6 @@ them not being reimported.
 """
 import os
 import signal
-import sys
-import subprocess
 from civis_jupyter_notebooks import platform_persistence, log_utils
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
 
@@ -27,30 +25,16 @@ def get_notebook(notebook_full_path):
 
 
 def install_requirements(requirements_path, c):
-    while os.path.isdir(requirements_path):
-        requirements_file = os.path.join(requirements_path, 'requirements.txt')
-        platform_persistence.logger.info('Looking for requirements at %s' % requirements_file)
-        if os.path.isfile(requirements_file):
-            platform_persistence.logger.info('Installing packages from %s' % requirements_file)
-            try:
-                subprocess.check_output(
-                        [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
-                        stderr=subprocess.STDOUT
-                        )
-                platform_persistence.logger.info('requirements.txt installed')
-            except subprocess.CalledProcessError as e:
-                # redirect to log file if pip fails
-                error_msg = "Unable to install requirements.txt, error code %d:\n" % (e.returncode) + \
-                    e.output.decode("utf-8")
-                platform_persistence.logger.info(error_msg)
-                with open(os.path.join(ROOT_DIR, 'civis-notebook-logs.log'), 'w') as f:
-                    f.write(error_msg)
-                platform_persistence.logger.info('Setting NotebookApp.default_url to %s' % LOG_URL)
-                c.NotebookApp.default_url = LOG_URL
-            break
-
-        else:
-            requirements_path = os.path.dirname(requirements_path)
+    try:
+        platform_persistence.install_requirements(requirements_path)
+    except NotebookManagementError as e:
+        # redirect to log file if pip fails
+        error_msg = "Unable to install requirements.txt:\n" + str(e)
+        platform_persistence.logger.info(error_msg)
+        with open(os.path.join(ROOT_DIR, 'civis-notebook-logs.log'), 'w') as f:
+            f.write(error_msg)
+        platform_persistence.logger.info('Setting NotebookApp.default_url to %s' % LOG_URL)
+        c.NotebookApp.default_url = LOG_URL
 
 
 def config_jupyter():
@@ -86,6 +70,4 @@ def main():
         install_requirements(requirements_path, c)
 
 
-if __name__ == '__main__':
-    # execute only if run as the entry point into the program
-    main()
+main()

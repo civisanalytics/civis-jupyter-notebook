@@ -8,6 +8,8 @@
 import civis
 import nbformat
 import os
+import sys
+import subprocess
 import requests
 from subprocess import check_call
 from subprocess import CalledProcessError
@@ -61,6 +63,27 @@ def __pull_and_load_requirements(url, notebook_path):
         requirements.write(r.content)
 
     logger.info('Requirements file ready')
+
+
+def install_requirements(requirements_path):
+    while os.path.isdir(requirements_path):
+        requirements_file = os.path.join(requirements_path, 'requirements.txt')
+        logger.info('Looking for requirements at %s' % requirements_file)
+        if not os.path.isfile(requirements_file):
+            requirements_path = os.path.dirname(requirements_path)
+            continue
+
+        logger.info('Installing packages from %s' % requirements_file)
+        try:
+            subprocess.check_output(
+                    [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
+                    stderr=subprocess.STDOUT
+                    )
+            logger.info('requirements.txt installed')
+            break
+
+        except subprocess.CalledProcessError as e:
+            raise NotebookManagementError(e.output.decode("utf-8"))
 
 
 def post_save(model, os_path, contents_manager):
