@@ -92,7 +92,7 @@ class PlatformPersistenceTest(unittest.TestCase):
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         isfile.return_value = True
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
-        nbwrite.assert_called()
+        nbwrite.assert_called_with(ANY, ANY)
 
     @patch('os.path.isfile')
     @patch('nbformat.write')
