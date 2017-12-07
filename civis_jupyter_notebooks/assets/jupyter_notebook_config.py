@@ -24,9 +24,9 @@ def get_notebook(notebook_full_path):
         os.kill(os.getpid(), signal.SIGTERM)
 
 
-def install_requirements(requirements_path, c):
+def find_and_install_requirements(requirements_path, c):
     try:
-        platform_persistence.install_requirements(requirements_path)
+        platform_persistence.find_and_install_requirements(requirements_path)
     except NotebookManagementError as e:
         # redirect to log file if pip fails
         error_msg = "Unable to install requirements.txt:\n" + str(e)
@@ -67,7 +67,7 @@ def main():
         get_notebook(notebook_full_path)
 
         requirements_path = os.path.dirname(notebook_full_path)
-        install_requirements(requirements_path, c)
+        find_and_install_requirements(requirements_path, c)
 
 
 main()
