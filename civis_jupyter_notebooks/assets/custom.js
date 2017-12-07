@@ -20,13 +20,20 @@ if (window.location.pathname == '/notebooks/notebook.ipynb') {
   $('#header-container').hide();
   $('a[title="dashboard"]').attr('href', '#');
 } else {
+  $('#header-container img').hide();
+  $('a[title="dashboard"]').attr('onclick', 'window.history.back(); return false');
+  $('a[title="dashboard"]').removeAttr('href');
+  $('a[title="dashboard"]').prepend('<span>Notebook</span>');
+  $('a[title="dashboard"]').prepend('<i class="fa fa-angle-left" />');
+  $('a[title="dashboard"]').addClass('notebook-back-link');
+  $('#header-container').append('<span class="terminal-span">Terminal</span>');
+  $('#header-container').addClass('notebook-back-header');
   $('#header-container').show();
-  $('a[title="dashboard"]').attr('href', '/notebooks/notebook.ipynb');
 }
 $('a[title="dashboard"]').attr('target', '_self');
 $('a[title="dashboard"]').attr('title', 'notebook');
 
-$('#maintoolbar-container').append('<div class="btn-group"><button class="btn btn-default" title="open terminal" onclick="window.location.href = \'/terminals/1\'"><i class="fa fa-terminal" aria-hidden="true"></i></button></div>')
+$('#maintoolbar-container').append('<div class="btn-group"><button class="btn btn-default" title="open terminal" onclick="window.location.href = \'/terminals/1\'"><i class="fa fa-terminal" aria-hidden="true"></i></button></div>');
 
 window.setTimeout(function() {
   $("#notebook_name").off();

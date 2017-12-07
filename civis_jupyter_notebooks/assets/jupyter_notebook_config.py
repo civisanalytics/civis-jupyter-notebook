@@ -19,9 +19,10 @@ c.NotebookApp.port = 8888
 c.NotebookApp.open_browser = False
 c.NotebookApp.token = ''
 c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
+c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
+c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 c.NotebookApp.allow_root = True
 c.FileContentsManager.post_save_hook = platform_persistence.post_save
-c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 
@@ -34,14 +35,8 @@ else:
     c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
     try:
-        # pull .ipynb file from s3 and save preview back if necessary
-        # pull requirements.txt file from s3
-        if not os.path.isfile(notebook_full_path):
-            platform_persistence.initialize_notebook_from_platform(notebook_full_path)
-
-        _, preview_url = platform_persistence.get_update_urls()
-        platform_persistence.generate_and_save_preview(preview_url, notebook_full_path)
-
+        platform_persistence.initialize_notebook_from_platform(notebook_full_path)
+        platform_persistence.post_save({'type': 'notebook'}, notebook_full_path, None)
     except NotebookManagementError as e:
         platform_persistence.logger.error(str(e))
         platform_persistence.logger.warn('Killing the notebook process b/c of a startup issue')
