@@ -9,6 +9,7 @@ import os
 import signal
 from civis_jupyter_notebooks import platform_persistence, log_utils
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
+from civis_jupyter_notebooks.git_utils import CivisGit
 
 # Jupyter Configuration
 c = get_config() # noqa
@@ -28,6 +29,14 @@ c.FileContentsManager.post_save_hook = platform_persistence.post_save
 
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 LOG_URL = '/edit/civis-notebook-logs.log'
+
+
+def stage_new_notebook(notebook_file_path):
+    civis_git = CivisGit()
+    if civis_git.is_git_enabled():
+        repo = civis_git.repo()
+        if notebook_file_path in repo.untracked_files:
+            repo.index.add([notebook_file_path])
 
 
 def get_notebook(notebook_full_path):
@@ -81,6 +90,7 @@ def main():
         c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
         get_notebook(notebook_full_path)
+        stage_new_notebook(nb_file_path)
 
         requirements_path = os.path.dirname(notebook_full_path)
         find_and_install_requirements(requirements_path, c)

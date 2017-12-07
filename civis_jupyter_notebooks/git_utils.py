@@ -9,6 +9,9 @@ class CivisGit():
         self.git_repo_mount_path = repo_mount_path if repo_mount_path else os.path.expanduser(os.path.join('~', 'work'))
         self.git_repo_ref = os.environ.get('GIT_REPO_REF', git_repo_ref)
 
+    def repo(self):
+        return Repo(self.git_repo_mount_path)
+
     def clone_repository(self):
         try:
             repo = Repo.clone_from(self.repo_url, self.git_repo_mount_path)
@@ -23,9 +26,10 @@ class CivisGit():
 
     def has_uncommitted_changes(self):
         try:
-            repo = Repo(self.git_repo_mount_path)
-            has_changes = len(repo.index.diff(None)) > 0
-            return has_changes
+            repo = self.repo()
+            staged_files = len(repo.index.diff("HEAD")) > 0
+            changed_files = len(repo.index.diff(None)) > 0
+            return changed_files or staged_files
 
         except GitCommandError as e:
             raise CivisGitError(e)
