@@ -15,11 +15,7 @@ $('#login_widget').hide();
 $('#kernel_menu .divider').hide();
 $('#menu-change-kernel').hide();
 
-if (window.location.pathname == '/notebooks/notebook.ipynb') {
-  // Disable a link back to the tree view
-  $('#header-container').hide();
-  $('a[title="dashboard"]').attr('href', '#');
-} else {
+if (window.location.pathname == '/terminals/1') {
   $('#header-container img').hide();
   $('a[title="dashboard"]').attr('onclick', 'window.history.back(); return false');
   $('a[title="dashboard"]').removeAttr('href');
@@ -29,6 +25,10 @@ if (window.location.pathname == '/notebooks/notebook.ipynb') {
   $('#header-container').append('<span class="terminal-span">Terminal</span>');
   $('#header-container').addClass('notebook-back-header');
   $('#header-container').show();
+} else {
+  // Disable a link back to the tree view
+  $('#header-container').hide();
+  $('a[title="dashboard"]').attr('href', '#');
 }
 $('a[title="dashboard"]').attr('target', '_self');
 $('a[title="dashboard"]').attr('title', 'notebook');
