@@ -8,6 +8,8 @@
 import civis
 import nbformat
 import os
+import sys
+import subprocess
 import requests
 from subprocess import check_call
 from subprocess import CalledProcessError
@@ -45,10 +47,10 @@ def initialize_notebook_from_platform(notebook_path):
     logger.info('Notebook file ready')
 
     if hasattr(notebook_model, 'requirements_url') and notebook_model.requirements_url:
-        __pull_and_load_requirements(notebook_model.requirements_url)
+        __pull_and_load_requirements(notebook_model.requirements_url, notebook_path)
 
 
-def __pull_and_load_requirements(url):
+def __pull_and_load_requirements(url, notebook_path):
     logger.info('Pulling down the requirements file')
     r = requests.get(url)
 
@@ -56,10 +58,35 @@ def __pull_and_load_requirements(url):
         raise NotebookManagementError('Failed to pull down requirements.txt file from S3')
 
     logger.info('Writing contents of requirements file')
-    with open('requirements.txt', 'wb') as requirements:
+    requirements_path = os.path.join(os.path.dirname(notebook_path), 'requirements.txt')
+    with open(requirements_path, 'wb') as requirements:
         requirements.write(r.content)
 
     logger.info('Requirements file ready')
+
+
+def find_and_install_requirements(requirements_path):
+    while os.path.isdir(requirements_path) and requirements_path != '/root':
+        requirements_file = os.path.join(requirements_path, 'requirements.txt')
+        logger.info('Looking for requirements at %s' % requirements_file)
+        if not os.path.isfile(requirements_file):
+            requirements_path = os.path.dirname(requirements_path)
+            continue
+
+        pip_install(requirements_file)
+        break
+
+
+def pip_install(requirements_file):
+    logger.info('Installing packages from %s' % requirements_file)
+    try:
+        subprocess.check_output(
+                [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
+                stderr=subprocess.STDOUT
+                )
+        logger.info('Installed requirements.txt')
+    except subprocess.CalledProcessError as e:
+        raise NotebookManagementError(e.output.decode("utf-8"))
 
 
 def post_save(model, os_path, contents_manager):

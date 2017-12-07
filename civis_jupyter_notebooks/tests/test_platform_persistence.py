@@ -1,4 +1,5 @@
 import os
+import subprocess
 import nbformat
 import requests
 import unittest
@@ -6,7 +7,6 @@ import logging
 import six
 import pkg_resources
 import platform
-from subprocess import CalledProcessError
 
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
@@ -59,11 +59,12 @@ class PlatformPersistenceTest(unittest.TestCase):
         rg.assert_called_with(url)
         requirements.assert_not_called()
 
+    @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
     @patch('civis.APIClient')
     @patch('civis_jupyter_notebooks.platform_persistence.requests.get')
-    def test_initialize_notebook_will_throw_error_on_nb_pull(self, rg, _client, _op):
-        rg.return_value = MagicMock(spec=requests.Response, status_code=500)
+    def test_initialize_notebook_will_throw_error_on_nb_pull(self, rg, _client, _op, _makedirs):
+        rg.return_value = MagicMock(spec=requests.Response, status_code=500, response={})
         self.assertRaises(NotebookManagementError,
                           lambda: platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH))
 
@@ -129,7 +130,7 @@ class PlatformPersistenceTest(unittest.TestCase):
         rg.return_value = MagicMock(spec=requests.Response, status_code=200, content=SAMPLE_NOTEBOOK)
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = url
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
-        requirements.assert_called_with(url)
+        requirements.assert_called_with(url, TEST_NOTEBOOK_PATH)
 
     @patch('os.makedirs')
     @patch('civis_jupyter_notebooks.platform_persistence.open')
@@ -184,7 +185,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     @patch('requests.put')
     def test_generate_preview_throws_error_on_convert(self, _rput, _client, check_call, _op):
-        check_call.side_effect = CalledProcessError('foo', 255)
+        check_call.side_effect = subprocess.CalledProcessError('foo', 255)
         self.assertRaises(NotebookManagementError,
                           lambda: platform_persistence.generate_and_save_preview('http://notebook_url_in_s3', 'os/path'))
         check_call.assert_called_with(['jupyter', 'nbconvert', '--to', 'html', 'path'], cwd='os')
@@ -193,6 +194,49 @@ class PlatformPersistenceTest(unittest.TestCase):
     def test_will_regenerate_api_client(self, mock_client):
         platform_persistence.get_client()
         mock_client.assert_called_with(resources='all')
+
+    @patch('os.path.isfile')
+    @patch('os.path.isdir')
+    @patch('civis_jupyter_notebooks.platform_persistence.pip_install')
+    def test_find_and_install_requirements_calls_pip_install(self, pip_install, isdir, isfile):
+        os.path.isdir.return_value = True
+        os.path.isfile.return_value = True
+        platform_persistence.find_and_install_requirements('/root/work/foo')
+        pip_install.assert_called_with('/root/work/foo/requirements.txt')
+
+    @patch('os.path.isfile')
+    @patch('os.path.isdir')
+    @patch('civis_jupyter_notebooks.platform_persistence.pip_install')
+    def test_find_and_install_requirements_searches_tree(self, pip_install, isdir, isfile):
+        os.path.isdir.return_value = True
+        os.path.isfile.side_effect = [False, True]
+        platform_persistence.find_and_install_requirements('/root/work/foo')
+        pip_install.assert_called_with('/root/work/requirements.txt')
+
+    @patch('os.path.isfile')
+    @patch('os.path.isdir')
+    @patch('civis_jupyter_notebooks.platform_persistence.pip_install')
+    def test_find_and_install_requirements_excludes_root(self, pip_install, isdir, isfile):
+        os.path.isdir.return_value = True
+        os.path.isfile.return_value = True
+        platform_persistence.find_and_install_requirements('/root')
+        pip_install.assert_not_called()
+
+    @patch('subprocess.check_output')
+    @patch('sys.executable')
+    def test_pip_install_calls_subprocess(self, executable, check_output):
+        platform_persistence.pip_install('/path/requirements.txt')
+        check_output.assert_called_with(
+                [executable, '-m', 'pip', 'install', '-r', '/path/requirements.txt'],
+                stderr=subprocess.STDOUT
+                )
+
+    @patch('subprocess.check_output')
+    @patch('sys.executable')
+    def test_pip_install_failure_raises_notebookmanagementerror(self, executable, check_output):
+        check_output.side_effect = subprocess.CalledProcessError(returncode=1, cmd='cmd', output=b'installation error')
+        with self.assertRaisesRegexp(NotebookManagementError, 'installation error'):
+            platform_persistence.pip_install('/path/requirements.txt')
 
 
 if __name__ == '__main__':
