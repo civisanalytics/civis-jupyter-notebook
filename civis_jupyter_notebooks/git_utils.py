@@ -16,12 +16,16 @@ class CivisGit():
         except GitCommandError as e:
             raise CivisGitError(e)
 
+    def is_git_enabled(self):
+        if self.repo_url is None:
+            return False
+        return True
+
     def has_uncommitted_changes(self):
         try:
             repo = Repo(self.git_repo_mount_path)
-            has_untracked_files = len(repo.untracked_files) > 0
             has_changes = len(repo.index.diff(None)) > 0
-            return has_changes or has_untracked_files
+            return has_changes
 
         except GitCommandError as e:
             raise CivisGitError(e)
