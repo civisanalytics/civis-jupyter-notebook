@@ -31,8 +31,8 @@ def find_and_install_requirements(requirements_path, c):
         # redirect to log file if pip fails
         error_msg = "Unable to install requirements.txt:\n" + str(e)
         platform_persistence.logger.info(error_msg)
-        with open(os.path.join(ROOT_DIR, 'civis-notebook-logs.log'), 'w') as f:
-            f.write(error_msg)
+        file_logger = log_utils.setup_file_logging()
+        file_logger.error(error_msg)
         platform_persistence.logger.info('Setting NotebookApp.default_url to %s' % LOG_URL)
         c.NotebookApp.default_url = LOG_URL
 
