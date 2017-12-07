@@ -73,11 +73,11 @@ def find_and_install_requirements(requirements_path):
             requirements_path = os.path.dirname(requirements_path)
             continue
 
-        __pip_install(requirements_file)
+        pip_install(requirements_file)
         break
 
 
-def __pip_install(requirements_file):
+def pip_install(requirements_file):
     logger.info('Installing packages from %s' % requirements_file)
     try:
         subprocess.check_output(
