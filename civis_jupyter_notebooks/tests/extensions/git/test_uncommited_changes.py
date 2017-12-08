@@ -8,11 +8,9 @@ from civis_jupyter_notebooks.git_utils import CivisGitError
 
 if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
         == pkg_resources.parse_version('3.4')):
-    from mock import patch
-    from mock import MagicMock
+    from mock import patch, MagicMock
 else:
-    from unittest.mock import patch
-    from unittest.mock import MagicMock
+    from unittest.mock import patch, MagicMock
 
 
 class UncommittedChangesHandlerTest(unittest.TestCase):
@@ -37,7 +35,7 @@ class UncommittedChangesHandlerTest(unittest.TestCase):
         dummy_response = {'status': 200, 'has_uncommitted_changes': True}
 
         self.handler.get()
-        civis_git.return_value.has_uncommitted_changes.assert_called()
+        civis_git.return_value.has_uncommitted_changes.assert_called_with()
         self.handler.finish.assert_called_with(dummy_response)
 
     @patch('civis_jupyter_notebooks.extensions.git.uncommitted_changes.CivisGit')
