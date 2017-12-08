@@ -10,9 +10,9 @@ from civis_jupyter_notebooks import notebook_config, platform_persistence, log_u
 
 if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
         == pkg_resources.parse_version('3.4')):
-    from mock import patch, Mock, ANY
+    from mock import patch, MagicMock, ANY
 else:
-    from unittest.mock import patch, Mock, ANY
+    from unittest.mock import patch, MagicMock, ANY
 
 
 class NotebookConfigTest(unittest.TestCase):
@@ -50,7 +50,7 @@ class NotebookConfigTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.logger')
     @patch('civis_jupyter_notebooks.log_utils.setup_file_logging')
     def test_find_and_install_requirements_shows_errors(self, log_setup, logger, persistence_find_and_install_requirements):
-        mock_logger = Mock(logging.Logger)
+        mock_logger = MagicMock(logging.Logger)
         persistence_find_and_install_requirements.side_effect = platform_persistence.NotebookManagementError('err')
         log_setup.return_value = mock_logger
         c = Config({})
