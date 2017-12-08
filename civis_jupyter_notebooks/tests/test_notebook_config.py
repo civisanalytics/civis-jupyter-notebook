@@ -10,9 +10,9 @@ from civis_jupyter_notebooks import notebook_config, platform_persistence, log_u
 
 if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
         == pkg_resources.parse_version('3.4')):
-    from mock import patch, Mock, ANY
+    from mock import patch, MagicMock, ANY
 else:
-    from unittest.mock import patch, Mock, ANY
+    from unittest.mock import patch, MagicMock, ANY
 
 
 class NotebookConfigTest(unittest.TestCase):
@@ -27,8 +27,8 @@ class NotebookConfigTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.post_save')
     def test_get_notebook_initializes_and_saves(self, post_save, init_notebook):
         notebook_config.get_notebook('path')
-        init_notebook.assert_called()
-        post_save.assert_called()
+        init_notebook.assert_called_with('path')
+        post_save.assert_called_with(ANY, 'path', None)
 
     @patch('civis_jupyter_notebooks.platform_persistence.initialize_notebook_from_platform')
     @patch('civis_jupyter_notebooks.platform_persistence.logger')
@@ -37,8 +37,8 @@ class NotebookConfigTest(unittest.TestCase):
         init_notebook.side_effect = platform_persistence.NotebookManagementError('err')
         notebook_config.get_notebook('path')
         logger.error.assert_called_with('err')
-        logger.warn.assert_called()
-        kill.assert_called()
+        logger.warn.assert_called_with(ANY)
+        kill.assert_called_with(ANY, ANY)
 
     @patch('civis_jupyter_notebooks.platform_persistence.find_and_install_requirements')
     def test_find_and_install_requirements_success(self, persistence_find_and_install_requirements):
@@ -50,7 +50,7 @@ class NotebookConfigTest(unittest.TestCase):
     @patch('civis_jupyter_notebooks.platform_persistence.logger')
     @patch('civis_jupyter_notebooks.log_utils.setup_file_logging')
     def test_find_and_install_requirements_shows_errors(self, log_setup, logger, persistence_find_and_install_requirements):
-        mock_logger = Mock(logging.Logger)
+        mock_logger = MagicMock(logging.Logger)
         persistence_find_and_install_requirements.side_effect = platform_persistence.NotebookManagementError('err')
         log_setup.return_value = mock_logger
         c = Config({})
@@ -67,14 +67,13 @@ class NotebookConfigTest(unittest.TestCase):
             self,
             log_file_has_logs, get_notebook, find_and_install_requirements,
             config_jupyter, _stage_new_notebook):
-
         c = Config({})
         log_file_has_logs.return_value = False
 
         notebook_config.civis_setup(c)
 
         assert(c.NotebookApp.default_url == '/notebooks/notebook.ipynb')
-        config_jupyter.assert_called()
+        config_jupyter.assert_called_with(ANY)
         get_notebook.assert_called_with(notebook_config.ROOT_DIR + '/notebook.ipynb')
         find_and_install_requirements.assert_called_with(notebook_config.ROOT_DIR, ANY)
 
@@ -94,7 +93,7 @@ class NotebookConfigTest(unittest.TestCase):
         environ_get.return_value = 'subpath/foo.ipynb'
         notebook_config.civis_setup(c)
         assert(c.NotebookApp.default_url == '/notebooks/subpath/foo.ipynb')
-        config_jupyter.assert_called()
+        config_jupyter.assert_called_with(ANY)
         get_notebook.assert_called_with(notebook_config.ROOT_DIR + '/subpath/foo.ipynb')
         find_and_install_requirements.assert_called_with(notebook_config.ROOT_DIR + '/subpath', ANY)
 
