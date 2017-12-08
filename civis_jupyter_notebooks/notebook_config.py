@@ -40,6 +40,9 @@ def config_jupyter(c):
     c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
+    c.NotebookApp.nbserver_extensions = {
+        'civis_jupyter_notebooks.extensions.git.uncommitted_changes': True
+    }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
 
