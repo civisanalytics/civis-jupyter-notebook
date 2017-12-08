@@ -47,3 +47,7 @@ class UncommittedChangesHandlerTest(unittest.TestCase):
         dummy_response = {'status': 200, 'has_uncommitted_changes': False}
         self.handler.get()
         self.handler.finish.assert_called_with(dummy_response)
+
+
+if __name__ == '__main__':
+    unittest.main()
