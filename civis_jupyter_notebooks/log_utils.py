@@ -2,6 +2,8 @@ import logging
 import os
 import sys
 
+USER_LOGS_URL = '/edit/civis-notebook-logs.log'
+
 USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'civis-notebook-logs.log'))
 
 
