@@ -52,8 +52,7 @@ def stage_new_notebook(notebook_file_path):
     civis_git = CivisGit()
     if civis_git.is_git_enabled():
         repo = civis_git.repo()
-        if notebook_file_path in repo.untracked_files:
-            repo.index.add([notebook_file_path])
+        repo.index.add([notebook_file_path])
 
 
 def civis_setup(c):
