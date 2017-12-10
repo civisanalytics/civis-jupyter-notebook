@@ -43,5 +43,6 @@ def cli():
     _copy(('assets', 'ipython_config.py'), ('~', '.ipython', 'profile_default'))
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
 
-    # copy extension
-    _copy(('extensions', 'git', 'uncommitted_changes.js'), ('~', '.ipython', 'nbextensions'))
+    # copy frontend extensions
+    for frontend_ext in os.listdir('assets/nbextensions'):
+        _copy(('assets', 'nbextensions', frontend_ext), ('~', '.ipython', 'nbextensions'))
