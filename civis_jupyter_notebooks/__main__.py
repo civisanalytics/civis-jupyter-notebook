@@ -42,3 +42,6 @@ def cli():
     _copy(('assets', '.bashrc'), ('~'))
     _copy(('assets', 'ipython_config.py'), ('~', '.ipython', 'profile_default'))
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
+
+    # copy extension
+    _copy(('extensions', 'git', 'uncommitted_changes.js'), ('~', '.ipython', 'nbextensions'))
