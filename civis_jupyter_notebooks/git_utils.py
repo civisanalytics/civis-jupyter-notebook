@@ -20,9 +20,7 @@ class CivisGit():
             raise CivisGitError(e)
 
     def is_git_enabled(self):
-        if self.repo_url is None:
-            return False
-        return True
+        return self.repo_url is not None
 
     def has_uncommitted_changes(self):
         try:

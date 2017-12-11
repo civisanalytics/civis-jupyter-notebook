@@ -18,7 +18,7 @@ class UncommittedChangesHandler(RequestHandler):
                 pass
 
             response['status'] = 200
-            response['has_uncommitted_changes'] = has_changes
+            response['dirty'] = has_changes
         self.finish(response)
 
 

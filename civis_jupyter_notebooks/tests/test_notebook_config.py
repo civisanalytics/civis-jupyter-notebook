@@ -123,16 +123,6 @@ class NotebookConfigTest(unittest.TestCase):
 
         civis_git.return_value.repo.untracked_files.assert_not_called()
 
-    @patch('civis_jupyter_notebooks.notebook_config.CivisGit')
-    def test_stage_new_notebook_does_not_stage_existing_file(self, civis_git):
-        civis_git.return_value.is_git_enabled.return_value = True
-        repo = civis_git.return_value.repo.return_value
-        repo.untracked_files = []
-
-        notebook_config.stage_new_notebook('existing_notebook.ipynb')
-
-        repo.index.add.assert_not_called()
-
 
 if __name__ == '__main__':
     unittest.main()
