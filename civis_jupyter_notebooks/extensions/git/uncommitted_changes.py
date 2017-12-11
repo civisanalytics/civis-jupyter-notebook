@@ -9,7 +9,7 @@ class UncommittedChangesHandler(RequestHandler):
         civis_git = CivisGit()
 
         if not civis_git.is_git_enabled():
-            response['status'] = 404
+            self.set_status(404, 'Not a git enabled notebook')
         else:
             has_changes = False
             try:
@@ -17,8 +17,8 @@ class UncommittedChangesHandler(RequestHandler):
             except CivisGitError:
                 pass
 
-            response['status'] = 200
             response['dirty'] = has_changes
+            self.set_status(200)
         self.finish(response)
 
 
