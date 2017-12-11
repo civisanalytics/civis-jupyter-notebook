@@ -2,17 +2,16 @@ define(['jquery'], function($) {
   var uncommitted_changes = function(elem) {
     var settings = {
       url: '/git/uncommitted_changes',
-      processData: false, 
       type: 'GET',
       contentType: 'applicaton/json',
       success: function(data) {
-        if data.has_uncommitted_changes {
+        if (data.hasOwnProperty('has_uncommitted_changes') && data.has_uncommitted_changes) {
           elem.css('display', 'inline-block');
         } else {
           elem.css('display', 'none');
         }
       },
-      error: function(data) {
+      error: function() {
         elem.css('display', 'none');
       }
     }
