@@ -5,7 +5,7 @@ define(['jquery'], function($) {
       type: 'GET',
       contentType: 'applicaton/json',
       success: function(data) {
-        if (data.hasOwnProperty('has_uncommitted_changes') && data.has_uncommitted_changes) {
+        if (data.hasOwnProperty('dirty') && data.dirty) {
           elem.css('display', 'inline-block');
         } else {
           elem.css('display', 'none');
