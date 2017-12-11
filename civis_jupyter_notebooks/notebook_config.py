@@ -3,7 +3,7 @@ import signal
 
 from civis_jupyter_notebooks import platform_persistence, log_utils
 from civis_jupyter_notebooks.git_utils import CivisGit
-from notebook.services.config import ConfigManager
+
 
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 
