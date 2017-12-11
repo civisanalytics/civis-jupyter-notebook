@@ -32,7 +32,7 @@ class UncommittedChangesHandlerTest(unittest.TestCase):
         civis_git.return_value.is_git_enabled.return_value = True
         civis_git.return_value.has_uncommitted_changes.return_value = True
 
-        dummy_response = {'status': 200, 'has_uncommitted_changes': True}
+        dummy_response = {'status': 200, 'dirty': True}
 
         self.handler.get()
         civis_git.return_value.has_uncommitted_changes.assert_called_with()
@@ -42,7 +42,7 @@ class UncommittedChangesHandlerTest(unittest.TestCase):
     def test_get_will_return_200_even_with_error(self, civis_git):
         civis_git.return_value.is_git_enabled.return_value = True
         civis_git.return_value.has_uncommitted_changes.side_effect = CivisGitError('dummy error')
-        dummy_response = {'status': 200, 'has_uncommitted_changes': False}
+        dummy_response = {'status': 200, 'dirty': False}
         self.handler.get()
         self.handler.finish.assert_called_with(dummy_response)
 
