@@ -58,11 +58,15 @@ class NotebookConfigTest(unittest.TestCase):
         mock_logger.error.assert_called_with("Unable to install requirements.txt:\nerr")
         assert(c.NotebookApp.default_url == log_utils.USER_LOGS_URL)
 
+    @patch('civis_jupyter_notebooks.notebook_config.stage_new_notebook')
     @patch('civis_jupyter_notebooks.notebook_config.config_jupyter')
     @patch('civis_jupyter_notebooks.notebook_config.find_and_install_requirements')
     @patch('civis_jupyter_notebooks.notebook_config.get_notebook')
     @patch('civis_jupyter_notebooks.log_utils.log_file_has_logs')
-    def test_civis_setup_success(self, log_file_has_logs, get_notebook, find_and_install_requirements, config_jupyter):
+    def test_civis_setup_success(
+            self,
+            log_file_has_logs, get_notebook, find_and_install_requirements,
+            config_jupyter, _stage_new_notebook):
         c = Config({})
         log_file_has_logs.return_value = False
 
@@ -73,6 +77,7 @@ class NotebookConfigTest(unittest.TestCase):
         get_notebook.assert_called_with(notebook_config.ROOT_DIR + '/notebook.ipynb')
         find_and_install_requirements.assert_called_with(notebook_config.ROOT_DIR, ANY)
 
+    @patch('civis_jupyter_notebooks.notebook_config.stage_new_notebook')
     @patch('os.environ.get')
     @patch('civis_jupyter_notebooks.notebook_config.config_jupyter')
     @patch('civis_jupyter_notebooks.notebook_config.find_and_install_requirements')
@@ -81,7 +86,8 @@ class NotebookConfigTest(unittest.TestCase):
     def test_civis_setup_uses_environment_setting(
             self,
             log_file_has_logs, get_notebook, find_and_install_requirements,
-            config_jupyter, environ_get):
+            config_jupyter, environ_get, _stage_new_notebook):
+
         c = Config({})
         log_file_has_logs.return_value = False
         environ_get.return_value = 'subpath/foo.ipynb'
@@ -98,6 +104,24 @@ class NotebookConfigTest(unittest.TestCase):
         log_file_has_logs.return_value = True
         notebook_config.civis_setup(c)
         assert(c.NotebookApp.default_url == log_utils.USER_LOGS_URL)
+
+    @patch('civis_jupyter_notebooks.notebook_config.CivisGit')
+    def test_stage_new_notebook_stages_notebook_file(self, civis_git):
+        civis_git.return_value.is_git_enabled.return_value = True
+        repo = civis_git.return_value.repo.return_value
+        repo.untracked_files = ['notebook.ipynb']
+
+        notebook_config.stage_new_notebook('notebook.ipynb')
+        repo.index.add.assert_called_with(['notebook.ipynb'])
+
+    @patch('civis_jupyter_notebooks.notebook_config.CivisGit')
+    def test_stage_new_notebook_git_is_disabled(self, civis_git):
+        civis_git.return_value.is_git_enabled.return_value = False
+        notebook_config.stage_new_notebook('notebook.ipynb')
+
+        civis_git.return_value.repo.assert_not_called()
+
+        civis_git.return_value.repo.untracked_files.assert_not_called()
 
 
 if __name__ == '__main__':

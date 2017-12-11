@@ -1,6 +1,9 @@
 import os
 import signal
+
 from civis_jupyter_notebooks import platform_persistence, log_utils
+from civis_jupyter_notebooks.git_utils import CivisGit
+
 
 ROOT_DIR = os.path.expanduser(os.path.join('~', 'work'))
 
@@ -38,8 +41,18 @@ def config_jupyter(c):
     c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
+    c.NotebookApp.nbserver_extensions = {
+        'civis_jupyter_notebooks.extensions.git.uncommitted_changes': True
+    }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
+
+
+def stage_new_notebook(notebook_file_path):
+    civis_git = CivisGit()
+    if civis_git.is_git_enabled():
+        repo = civis_git.repo()
+        repo.index.add([notebook_file_path])
 
 
 def civis_setup(c):
@@ -54,6 +67,7 @@ def civis_setup(c):
         c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
         get_notebook(notebook_full_path)
+        stage_new_notebook(nb_file_path)
 
         requirements_path = os.path.dirname(notebook_full_path)
         find_and_install_requirements(requirements_path, c)
