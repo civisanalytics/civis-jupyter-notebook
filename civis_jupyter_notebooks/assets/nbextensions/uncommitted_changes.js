@@ -21,9 +21,9 @@ define(['jquery'], function($) {
   }
 
   function _on_load() {
-    var notificationBox = '<div id="uncommitted-changes" style="display: none;"><span> Uncommitted Changes </span></div>';
-    $('#notification_area').append(notificationBox);
-    elem = $('#uncommitted-changes')
+    var notificationBox = '<div id="uncommitted_changes" class="notification_widget btn btn-xs navbar-btn" style="display: none"><span>Uncommitted Changes</span></div>'
+    $('#notification_trusted').before(notificationBox);
+    elem = $('#uncommitted_changes')
 
     uncommitted_changes(elem);
     window.setInterval(uncommitted_changes, 3000, elem);
