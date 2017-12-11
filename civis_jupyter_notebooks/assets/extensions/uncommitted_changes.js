@@ -20,7 +20,7 @@ define(['jquery'], function($) {
   }
 
   function _on_load() {
-    var notificationBox = '<div id="uncommitted_changes" class="notification_widget btn btn-xs navbar-btn" style="display: none"><span>Uncommitted Changes</span></div>'
+    var notificationBox = '<div id="uncommitted_changes" onclick="window.location.href=\'/terminals/1\'" title="Open terminal to commit" class="notification_widget btn btn-xs navbar-btn" style="display: none"><span>Uncommitted Changes</span></div>'
     $('#notification_trusted').before(notificationBox);
     elem = $('#uncommitted_changes')
 
