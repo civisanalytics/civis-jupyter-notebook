@@ -31,11 +31,6 @@ def find_and_install_requirements(requirements_path, c):
         c.NotebookApp.default_url = log_utils.USER_LOGS_URL
 
 
-def _configure_nbextensions():
-    cm = ConfigManager()
-    cm.update('notebook', {'load_extensions': {'uncommitted_changes': True}})
-
-
 def config_jupyter(c):
     # Jupyter Configuration
     c.NotebookApp.ip = '*'
@@ -51,9 +46,6 @@ def config_jupyter(c):
     }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
-
-    # add custom frontend extensions
-    _configure_nbextensions()
 
 
 def stage_new_notebook(notebook_file_path):

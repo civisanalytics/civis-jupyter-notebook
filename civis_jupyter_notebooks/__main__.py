@@ -16,8 +16,9 @@ def cli():
     # make home areas and dirs
     for dr in [('~', 'work'),
                ('~', '.jupyter', 'custom'),
+               # folder that holds all the JS for notebook frontend extensions
+               ('~', '.jupyter', 'extensions'),
                ('~', '.jupyter', 'custom', 'fonts'),
-               ('~', '.ipython', 'nbextension'),
                ('~', '.ipython', 'profile_default')]:
         try:
             os.makedirs(os.path.expanduser(os.path.join(*dr)))
@@ -44,5 +45,9 @@ def cli():
     _copy(('assets', 'ipython_config.py'), ('~', '.ipython', 'profile_default'))
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
 
-    # copy frontend extensions
-    _copy(('assets', 'nbextensions', 'uncommitted_changes.js'), ('~', '.ipython', 'nbextension'))
+    _copy(('assets', 'extensions', 'uncommitted_changes.js'), ('~', '.jupyter', 'extensions'))
+
+    # install and enable nbextensions
+    for cmd in ['jupyter nbextension install ~/.jupyter/extensions',
+                'jupyter nbextension enable extensions/uncommitted_changes']:
+        subprocess.check_call(cmd, shell=True)
