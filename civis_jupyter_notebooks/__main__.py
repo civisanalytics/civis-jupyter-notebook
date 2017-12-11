@@ -17,6 +17,7 @@ def cli():
     for dr in [('~', 'work'),
                ('~', '.jupyter', 'custom'),
                ('~', '.jupyter', 'custom', 'fonts'),
+               ('~', '.ipython', 'nbextension'),
                ('~', '.ipython', 'profile_default')]:
         try:
             os.makedirs(os.path.expanduser(os.path.join(*dr)))
@@ -44,5 +45,4 @@ def cli():
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
 
     # copy frontend extensions
-    for frontend_ext in os.listdir('assets/nbextensions'):
-        _copy(('assets', 'nbextensions', frontend_ext), ('~', '.ipython', 'nbextensions'))
+    _copy(('assets', 'nbextensions', 'uncommitted_changes.js'), ('~', '.ipython', 'nbextension'))
