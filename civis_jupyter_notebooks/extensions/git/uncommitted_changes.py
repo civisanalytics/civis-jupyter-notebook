@@ -1,15 +1,19 @@
 from notebook.utils import url_path_join as ujoin
+from notebook.log import log_request
 from tornado.web import RequestHandler
 from civis_jupyter_notebooks.git_utils import CivisGit, CivisGitError
 
 
 class UncommittedChangesHandler(RequestHandler):
+    def _log(self):
+        log_func(self)
+
     def get(self):
         response = dict()
         civis_git = CivisGit()
 
         if not civis_git.is_git_enabled():
-            response['status'] = 404
+            self.set_status(404, 'Not a git enabled notebook')
         else:
             has_changes = False
             try:
@@ -17,9 +21,14 @@ class UncommittedChangesHandler(RequestHandler):
             except CivisGitError:
                 pass
 
-            response['status'] = 200
             response['dirty'] = has_changes
+            self.set_status(200)
         self.finish(response)
+
+
+def log_func(handler):
+    if handler.get_status() != 404:
+        log_request(handler)
 
 
 def load_jupyter_server_extension(nbapp):

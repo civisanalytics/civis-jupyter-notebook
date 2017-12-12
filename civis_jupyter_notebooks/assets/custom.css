@@ -56,6 +56,16 @@ a.notebook-back-link span {
   padding: 2px;
 }
 
+#uncommitted_changes {
+  border: 1px solid #F77552;
+  color: #F77552;
+}
+
+#no_changes {
+  color: #00AA7F;
+  font-size: 102%;
+}
+
 @font-face {
   font-family: 'civicons';
   src: url(/custom/fonts/civicons.eot);
