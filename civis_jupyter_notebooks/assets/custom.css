@@ -57,12 +57,13 @@ a.notebook-back-link span {
 }
 
 #uncommitted_changes {
-  border: 1px solid red;
-  color: red;
+  border: 1px solid #F77552;
+  color: #F77552;
 }
 
-#noChanges {
-  color: green;
+#no_changes {
+  color: #00AA7F;
+  font-size: 102%;
 }
 
 @font-face {
