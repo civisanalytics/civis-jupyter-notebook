@@ -1,18 +1,27 @@
 define(['jquery'], function($) {
-  var uncommitted_changes = function(elem) {
+  var interval = null;
+  var uncommitted_changes = function(notificationBoxes) {
     var settings = {
       url: '/git/uncommitted_changes',
       type: 'GET',
       contentType: 'applicaton/json',
       success: function(data) {
         if (data.hasOwnProperty('dirty') && data.dirty) {
-          elem.css('display', 'inline-block');
+          notificationBoxes.uncommittedChanges.css('display', 'inline-block');
+          notificationBoxes.noChangesBox.css('display', 'none');
         } else {
-          elem.css('display', 'none');
+          notificationBoxes.noChangesBox.css('display', 'inline-block');
+          notificationBoxes.uncommittedChanges.css('display', 'none');
         }
       },
       error: function() {
-        elem.css('display', 'none');
+        notificationBoxes.uncommittedChanges.css('display', 'none');
+        notificationBoxes.noChangesBox.css('display', 'none');
+      },
+      complete: function(jXHR) {
+        if (jXHR.status == 404 && interval) {
+          window.clearInterval(interval);
+        }
       }
     }
 
@@ -20,12 +29,15 @@ define(['jquery'], function($) {
   }
 
   function _on_load() {
-    var notificationBox = '<div id="uncommitted_changes" onclick="window.location.href=\'/terminals/1\'" title="Open terminal to commit" class="notification_widget btn btn-xs navbar-btn" style="display: none"><i class="fa fa-circle"></i><span> Uncommitted Changes </span></div>';
-    $('#notification_trusted').before(notificationBox);
-    elem = $('#uncommitted_changes')
+    var uncommittedChangesBox = '<div id="uncommitted_changes" onclick="window.location.href=\'/terminals/1\'" title="Open terminal to commit" class="notification_widget btn btn-xs navbar-btn" style="display: none"><i class="fa fa-circle"></i><span> Uncommitted Changes </span></div>';
+    $('#notification_trusted').before(uncommittedChangesBox);
 
-    uncommitted_changes(elem);
-    window.setInterval(uncommitted_changes, 3000, elem);
+    var noChangesBox = '<div id="noChanges" class="navbar-btn btn btn-xs" style="display: none"><span> Nothing to Commit </span></div>';
+    $('#uncommitted_changes').before(noChangesBox);
+
+    var notificationBoxes = {'uncommittedChanges': $('#uncommitted_changes'), 'noChanges': $('#noChanges')}
+    uncommitted_changes(notificationBoxes, null);
+    interval = window.setInterval(uncommitted_changes, 3000, notificationBoxes);
   }
 
   return {load_ipython_extension: _on_load };
