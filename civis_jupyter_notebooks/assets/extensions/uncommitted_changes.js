@@ -1,5 +1,4 @@
 define(['jquery'], function($) {
-  var interval = null;
   var uncommitted_changes = function(notificationBoxes) {
     var settings = {
       url: '/git/uncommitted_changes',
@@ -8,20 +7,15 @@ define(['jquery'], function($) {
       success: function(data) {
         if (data.hasOwnProperty('dirty') && data.dirty) {
           notificationBoxes.uncommittedChanges.css('display', 'inline-block');
-          notificationBoxes.noChangesBox.css('display', 'none');
+          notificationBoxes.noChanges.css('display', 'none');
         } else {
-          notificationBoxes.noChangesBox.css('display', 'inline-block');
+          notificationBoxes.noChanges.css('display', 'inline-block');
           notificationBoxes.uncommittedChanges.css('display', 'none');
         }
       },
       error: function() {
         notificationBoxes.uncommittedChanges.css('display', 'none');
-        notificationBoxes.noChangesBox.css('display', 'none');
-      },
-      complete: function(jXHR) {
-        if (jXHR.status == 404 && interval) {
-          window.clearInterval(interval);
-        }
+        notificationBoxes.noChanges.css('display', 'none');
       }
     }
 
@@ -37,7 +31,7 @@ define(['jquery'], function($) {
 
     var notificationBoxes = {'uncommittedChanges': $('#uncommitted_changes'), 'noChanges': $('#noChanges')}
     uncommitted_changes(notificationBoxes, null);
-    interval = window.setInterval(uncommitted_changes, 3000, notificationBoxes);
+    window.setInterval(uncommitted_changes, 3000, notificationBoxes);
   }
 
   return {load_ipython_extension: _on_load };
