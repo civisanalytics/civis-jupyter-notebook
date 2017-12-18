@@ -15,7 +15,7 @@ define(['base/js/namespace'], function(Jupyter) {
     var prefix = 'terminal';
     var action_name = 'open-terminal';
     var full_action_name = Jupyter.actions.register(action, action_name, prefix);
-    Jupyter.toolbar.add_buttons_group([full_action_name]);
+    Jupyter.toolbar.add_buttons_group([full_action_name], 'terminal');
   }
 
   return { load_ipython_extension: _on_load };
