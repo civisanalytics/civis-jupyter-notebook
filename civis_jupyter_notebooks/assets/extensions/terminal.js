@@ -3,11 +3,11 @@ define(['base/js/namespace'], function(Jupyter) {
     var action = {
       icon: 'fa-terminal',
       help: 'Open Terminal',
-      handler: function(env, event) {
+      handler: function(env) {
         env.notebook.save_checkpoint();
-        if (event) {
-          event.preventDefault();
-        }
+
+        // stop pop up from displaying
+        window.onbeforeunload = function(){}
         window.location.href = "/terminals/1";
       }
     };
