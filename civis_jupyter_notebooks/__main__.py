@@ -45,9 +45,14 @@ def cli():
     _copy(('assets', 'ipython_config.py'), ('~', '.ipython', 'profile_default'))
     _copy(('assets', 'civis_client_config.py'), ('~', '.ipython'))
 
-    _copy(('assets', 'extensions', 'uncommitted_changes.js'), ('~', '.jupyter', 'extensions'))
+    # copy frontend extensions
+    frontend_extensions = pkg_resources.resource_listdir(__name__, os.path.join('assets', 'extensions'))
+    for fe_ext in frontend_extensions:
+        _copy(('assets', 'extensions', fe_ext), ('~', '.jupyter', 'extensions'))
 
     # install and enable nbextensions
-    for cmd in ['jupyter nbextension install ~/.jupyter/extensions',
-                'jupyter nbextension enable extensions/uncommitted_changes']:
+    subprocess.check_call('jupyter nbextension install ~/.jupyter/extensions', shell=True)
+    for extension in frontend_extensions:
+        ext_name = os.path.splitext(extension)[0]
+        cmd = 'jupyter nbextension enable extensions/{}'.format(ext_name)
         subprocess.check_call(cmd, shell=True)

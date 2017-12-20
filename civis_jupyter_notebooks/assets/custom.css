@@ -62,8 +62,8 @@ a.notebook-back-link span {
 }
 
 #no_changes {
-  color: #00AA7F;
   font-size: 102%;
+  cursor: default;
 }
 
 @font-face {

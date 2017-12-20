@@ -33,8 +33,6 @@ if (window.location.pathname == '/terminals/1') {
 $('a[title="dashboard"]').attr('target', '_self');
 $('a[title="dashboard"]').attr('title', 'notebook');
 
-$('#maintoolbar-container').append('<div class="btn-group"><button class="btn btn-default" title="open terminal" onclick="window.location.href = \'/terminals/1\'"><i class="fa fa-terminal" aria-hidden="true"></i></button></div>');
-
 window.setTimeout(function() {
   $("#notebook_name").off();
   require(['base/js/events'], function(events) {
