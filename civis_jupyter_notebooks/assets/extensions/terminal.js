@@ -5,6 +5,7 @@ define(['base/js/namespace'], function(Jupyter) {
       help: 'Open Terminal',
       handler: function(env) {
         env.notebook.save_checkpoint();
+        env.notebook.set_dirty(false);
 
         // stop pop up from displaying
         window.onbeforeunload = function(){}
