@@ -82,9 +82,10 @@ def pip_install(requirements_file):
     logger.info('Installing packages from %s' % requirements_file)
     try:
         subprocess.check_output(
-                [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
-                stderr=subprocess.STDOUT
-                )
+            [sys.executable, '-m', 'pip', 'install',
+             '--upgrade', '-r', requirements_file],
+            stderr=subprocess.STDOUT
+        )
         logger.info('Installed requirements.txt')
     except subprocess.CalledProcessError as e:
         raise NotebookManagementError(e.output.decode("utf-8"))

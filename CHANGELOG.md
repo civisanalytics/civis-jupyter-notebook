@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.5.0] - 2019-03-27
+
+### Changed
+- Install pip requirements with the `--upgrade` flag
+
 ## [0.4.3] - 2019-02-15
 
 ### Fixed
