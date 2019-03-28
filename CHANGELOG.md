@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [0.4.4] - 2019-03-28
+
+### Fixed
+- Fix a version of tornado compatible with our jupyter version (#35)
+
 ## [0.4.3] - 2019-02-15
 
 ### Fixed
