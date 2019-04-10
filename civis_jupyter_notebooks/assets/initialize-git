@@ -14,7 +14,7 @@ if test $GIT_CREDENTIAL; then
   git config --global credential.helper 'cache --timeout=10000000'
   git credential approve <<EOF
 protocol=https
-host=github.com
+host=$GIT_HOST
 username=$GIT_CREDENTIAL
 password=x-oauth-basic
 EOF
