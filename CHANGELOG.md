@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [0.4.5] - 2019-04-22
 
 ### Fixed
-- Fix issue where not all assets are included with published PyPI package (#36).
+- Fix issue where not all assets are included with published PyPI package (#38).
 
 ## [0.4.4] - 2019-03-28
 
