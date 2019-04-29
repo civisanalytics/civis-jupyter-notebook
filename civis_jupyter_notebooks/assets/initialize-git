@@ -1,5 +1,5 @@
 #!/bin/bash
-# NOTE: Similar logic exists in https://github.com/civisanalytics/replicator/blob/master/git-clone.sh
+# NOTE: Similar logic exists in https://github.com/civisanalytics/replicator/blob/3691bec/git-clone.sh
 # TODO: write conditional for setting up SSH Key
 
 if test $GIT_CREDENTIAL; then
