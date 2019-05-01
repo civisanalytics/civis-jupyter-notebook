@@ -19,7 +19,7 @@ def setup_stream_logging():
     formatter = logging.Formatter(
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")
-    ch.setLevel(logging.INFO)
+    ch.setLevel(logging.WARNING)
     ch.setFormatter(formatter)
     logger.addHandler(ch)
     return logger
