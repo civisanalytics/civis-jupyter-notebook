@@ -21,9 +21,9 @@ def setup_stream_logging():
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")
     error_handler.setLevel(logging.WARNING)
-    info_handler.setLevel(logging.DEBUG)
+    info_handler.setLevel(logging.INFO)
     error_handler.setFormatter(formatter)
-    info_handler.setLevel(formatter)
+    info_handler.setFormatter(formatter)
     logger.addHandler(error_handler)
     logger.addHandler(info_handler)
     return logger
