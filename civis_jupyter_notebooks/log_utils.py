@@ -15,13 +15,17 @@ def setup_stream_logging():
     logger.propagate = False
     # make sure to grab orig stderr since things seem to get redirected a bit
     # by the notebook and/or ipython...
-    ch = logging.StreamHandler(stream=sys.__stderr__)
+    error_handler = logging.StreamHandler(stream=sys.__stderr__)
+    info_handler = logging.StreamHandler(stream=sys.__stdout__)
     formatter = logging.Formatter(
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")
-    ch.setLevel(logging.WARNING)
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    error_handler.setLevel(logging.WARNING)
+    info_handler.setLevel(logging.DEBUG)
+    error_handler.setFormatter(formatter)
+    info_handler.setLevel(formatter)
+    logger.addHandler(error_handler)
+    logger.addHandler(info_handler)
     return logger
 
 
