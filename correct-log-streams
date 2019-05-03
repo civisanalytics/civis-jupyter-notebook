@@ -1,11 +1,3 @@
 #!/bin/bash
 
-input=$(cat)
-level=$(echo $input | cut -c 2)
-
-if [ "$level" = I ];
-then
-  echo $input
-else
-  echo $input >&2
-fi
+tee >(grep -v "^\[I" >&2) | grep "^\[I"
