@@ -2,4 +2,4 @@
 
 set -e
 
-exec jupyter notebook $* 2>&1 | tee >(grep -v "^\[I " >&2) | grep "^\[I "
+exec jupyter notebook $*
