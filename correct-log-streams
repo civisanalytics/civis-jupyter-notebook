@@ -1,3 +1,0 @@
-#!/bin/bash
-
-tee >(grep -v "^\[I" >&2) | grep "^\[I"
