@@ -41,6 +41,7 @@ def config_jupyter(c):
     c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
+    c.NotebookApp.log_level = 'INFO'
     c.NotebookApp.nbserver_extensions = {
         'civis_jupyter_notebooks.extensions.git.uncommitted_changes': True
     }
