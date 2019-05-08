@@ -11,17 +11,28 @@ def setup_stream_logging():
     """ Set up log format """
     logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
     logger.setLevel(logging.INFO)
-    # needed to remove duplicate log records..don't know why...
+
+    # prevents duplicate log records by preventing messages from being passed to ancestor loggers, i.e. the root logger
     logger.propagate = False
-    # make sure to grab orig stderr since things seem to get redirected a bit
-    # by the notebook and/or ipython...
-    ch = logging.StreamHandler(stream=sys.__stderr__)
+
     formatter = logging.Formatter(
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")
-    ch.setLevel(logging.INFO)
-    ch.setFormatter(formatter)
-    logger.addHandler(ch)
+    error_handler = logging.StreamHandler(stream=sys.__stderr__)
+    info_handler = logging.StreamHandler(stream=sys.__stdout__)
+
+    error_handler.setLevel(logging.WARNING)
+    info_handler.setLevel(logging.INFO)
+
+    error_handler.setFormatter(formatter)
+    info_handler.setFormatter(formatter)
+
+    logger.addHandler(error_handler)
+    logger.addHandler(info_handler)
+
+    logger.info('hello! this is an info message')
+    logger.warn('warning!')
+
     return logger
 
 
