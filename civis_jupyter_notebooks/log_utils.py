@@ -8,30 +8,38 @@ USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'civis-notebook
 
 
 def setup_stream_logging():
-    """ Set up log format """
+    """ Set up logging"""
     logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
-    logger.setLevel(logging.INFO)
 
     # prevents duplicate log records by preventing messages from being passed to ancestor loggers, i.e. the root logger
     logger.propagate = False
 
+    # Sets the lowest level which this logger will pay attention to (i.e. debug level logs will be ignored)
+    logger.setLevel(logging.INFO)
+
     formatter = logging.Formatter(
         fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
         datefmt="%H:%M:%S")
+
+    # Configures a handler for sending warning level and above messages to stderr
     error_handler = logging.StreamHandler(stream=sys.__stderr__)
-    info_handler = logging.StreamHandler(stream=sys.__stdout__)
-
     error_handler.setLevel(logging.WARNING)
-    info_handler.setLevel(logging.INFO)
-
     error_handler.setFormatter(formatter)
-    info_handler.setFormatter(formatter)
-
     logger.addHandler(error_handler)
+
+    # Configures a handler for sending info level and above messages to stdout
+    info_handler = logging.StreamHandler(stream=sys.__stdout__)
+    info_handler.setLevel(logging.INFO)
+    info_handler.setFormatter(formatter)
     logger.addHandler(info_handler)
 
-    logger.info('hello! this is an info message')
-    logger.warn('warning!')
+    # Test logs
+    logger.debug('debug')
+    logger.info('info')
+    logger.warn('warn')
+    logger.warning('warning')
+    logger.error('error')
+    logger.critical('critical')
 
     return logger
 
@@ -54,6 +62,11 @@ def setup_file_logging():
     handler.setLevel(logging.ERROR)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
+    logger.info('file logging info!')
+    logger.warn('file logging warn!')
+    logger.warning('file logging warning!')
+    logger.error('file logging error!')
     return logger
 
 

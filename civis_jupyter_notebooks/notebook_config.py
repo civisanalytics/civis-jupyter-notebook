@@ -46,7 +46,6 @@ def config_jupyter(c):
     }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ['DEFAULT_KERNEL']
-    c.Application.log_level = 'INFO'
 
 
 def stage_new_notebook(notebook_file_path):
