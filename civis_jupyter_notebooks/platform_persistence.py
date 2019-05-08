@@ -19,6 +19,10 @@ from civis_jupyter_notebooks import log_utils
 
 def initialize_notebook_from_platform(notebook_path):
     """ This runs on startup to initialize the notebook """
+    file_logger = log_utils.setup_file_logging()
+    file_logger.info('file logger created')
+    file_logger.error('file logger logging an error')
+
     logger.info('Retrieving notebook information from Platform')
     client = get_client()
     notebook_model = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])

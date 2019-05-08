@@ -7,6 +7,15 @@ USER_LOGS_URL = '/edit/civis-notebook-logs.log'
 USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'civis-notebook-logs.log'))
 
 
+# Adapted from https://stackoverflow.com/a/1383365
+class SingleLevelFilter(logging.Filter):
+    def __init__(self, passlevel):
+        self.passlevel = passlevel
+
+    def filter(self, record):
+        return (record.levelno == self.passlevel)
+
+
 def setup_stream_logging():
     """ Set up logging"""
     logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
@@ -29,7 +38,9 @@ def setup_stream_logging():
 
     # Configures a handler for sending info level and above messages to stdout
     info_handler = logging.StreamHandler(stream=sys.__stdout__)
-    info_handler.setLevel(logging.INFO)
+    # info_handler.setLevel(logging.INFO)
+    # Filter so that the info handler will handle ONLY info level logs
+    info_handler.addFilter(SingleLevelFilter(logging.INFO))
     info_handler.setFormatter(formatter)
     logger.addHandler(info_handler)
 
@@ -63,10 +74,11 @@ def setup_file_logging():
     handler.setFormatter(formatter)
     logger.addHandler(handler)
 
-    logger.info('file logging info!')
-    logger.warn('file logging warn!')
-    logger.warning('file logging warning!')
+    logger.info('file logging info')
+    logger.warn('file logging warn')
+    logger.warning('file logging warning')
     logger.error('file logging error!')
+    logger.critical('file logging critical!')
     return logger
 
 
