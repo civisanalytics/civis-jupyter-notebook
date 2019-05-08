@@ -58,6 +58,20 @@ def setup_stream_logging():
 
 
 def setup_file_logging():
+    """
+    Configure the USER_VISIBLE_LOGS for file logging.
+
+    File logging is intended for errors to be shown to the user.
+    E.g. If we fail to install requirements, then we redirect
+    c.NotebookApp.default_url to point to this log file.
+
+    TODO: This was written during the intial development
+    of notebooks and may no longer be necessary. CIVP-18444
+
+    Returns
+    -------
+    The USER_VISIBLE_LOGS logger
+    """
     directory = os.path.dirname(USER_VISIBLE_LOGS)
     if not os.path.exists(directory):
         os.makedirs(directory)
@@ -75,6 +89,7 @@ def setup_file_logging():
     handler.setLevel(logging.ERROR)
     handler.setFormatter(formatter)
     logger.addHandler(handler)
+
     return logger
 
 
