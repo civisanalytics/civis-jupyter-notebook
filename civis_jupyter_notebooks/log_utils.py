@@ -18,7 +18,7 @@ class SingleLevelFilter(logging.Filter):
 
 def setup_stream_logging():
     logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
-    configure_logger_for_stream_handling(logger)
+    return configure_logger_for_stream_handling(logger)
 
 
 def configure_logger_for_stream_handling(logger):
