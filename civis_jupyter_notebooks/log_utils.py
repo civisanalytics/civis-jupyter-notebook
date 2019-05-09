@@ -16,9 +16,14 @@ class SingleLevelFilter(logging.Filter):
         return (record.levelno == self.passlevel)
 
 
-def setup_stream_logging():
+def setup_stream_logging(logger):
+    logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
+    configure_logger_for_stream_handling(logger)
+
+
+def configure_logger_for_stream_handling(logger):
     """
-    Configure the CIVIS_PLATFORM_BACKEND logger for stream logging.
+    Configure a given logger for stream logging.
 
     DEBUG level logs will be ignored,
     INFO level logs will be sent to stdout,
@@ -26,10 +31,8 @@ def setup_stream_logging():
 
     Returns
     -------
-    The CIVIS_PLATFORM_BACKEND logger
+    The configured logger
     """
-    logger = logging.getLogger('CIVIS_PLATFORM_BACKEND')
-
     # prevents duplicate log records by preventing messages from being passed to ancestor loggers, e.g. the root logger
     logger.propagate = False
 
