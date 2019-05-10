@@ -4,6 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## [1.0.0] - 2019-05-10
+
+### Removed
+- Support for Python 3.4 (#45)
+
+### Added
+- Support for Python 3.7 (#45)
+
+### Changed
+- Logger configuration: INFO level logs are now emitted to stdout (#43).
+
 ## [0.5.0] - 2019-04-30
 
 ### Added
