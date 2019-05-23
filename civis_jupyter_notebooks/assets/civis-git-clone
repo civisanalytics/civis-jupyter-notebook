@@ -13,6 +13,3 @@ if os.environ.get('GIT_REPO_URL'):
         stream_logger.info('clone complete')
     except CivisGitError as e:
         stream_logger.error('error clonging git repository: {}'.format(str(e)))
-        # Initialize logger here so directory is empty for git clone
-        file_logger = log_utils.setup_file_logging()
-        file_logger.error(str(e))

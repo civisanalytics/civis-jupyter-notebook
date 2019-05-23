@@ -22,13 +22,8 @@ def find_and_install_requirements(requirements_path, c):
     try:
         platform_persistence.find_and_install_requirements(requirements_path)
     except platform_persistence.NotebookManagementError as e:
-        # redirect to log file if pip fails
         error_msg = "Unable to install requirements.txt:\n" + str(e)
         platform_persistence.logger.error(error_msg)
-        file_logger = log_utils.setup_file_logging()
-        file_logger.error(error_msg)
-        platform_persistence.logger.info('Setting NotebookApp.default_url to %s' % log_utils.USER_LOGS_URL)
-        c.NotebookApp.default_url = log_utils.USER_LOGS_URL
 
 
 def config_jupyter(c):
@@ -58,16 +53,12 @@ def stage_new_notebook(notebook_file_path):
 def civis_setup(c):
     config_jupyter(c)
 
-    if log_utils.log_file_has_logs(log_utils.USER_VISIBLE_LOGS):
-        # redirect to log file
-        c.NotebookApp.default_url = log_utils.USER_LOGS_URL
-    else:
-        nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
-        notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
-        c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
+    nb_file_path = os.environ.get('NOTEBOOK_FILE_PATH', 'notebook.ipynb').strip('/')
+    notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
+    c.NotebookApp.default_url = '/notebooks/{}'.format(nb_file_path)
 
-        get_notebook(notebook_full_path)
-        stage_new_notebook(nb_file_path)
+    get_notebook(notebook_full_path)
+    stage_new_notebook(nb_file_path)
 
-        requirements_path = os.path.dirname(notebook_full_path)
-        find_and_install_requirements(requirements_path, c)
+    requirements_path = os.path.dirname(notebook_full_path)
+    find_and_install_requirements(requirements_path, c)
