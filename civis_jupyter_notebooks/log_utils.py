@@ -1,10 +1,5 @@
 import logging
-import os
 import sys
-
-USER_LOGS_URL = '/edit/civis-notebook-logs.log'
-
-USER_VISIBLE_LOGS = os.path.expanduser(os.path.join('~', 'work', 'civis-notebook-logs.log'))
 
 
 # Adapted from https://stackoverflow.com/a/1383365
@@ -55,43 +50,3 @@ def setup_stream_logging():
     logger.addHandler(info_handler)
 
     return logger
-
-
-def setup_file_logging():
-    """
-    Configure the USER_VISIBLE_LOGS for file logging.
-
-    File logging is intended for errors to be shown to the user.
-    E.g. If we fail to install requirements, then we redirect
-    c.NotebookApp.default_url to point to this log file.
-
-    TODO: This was written during the intial development
-    of notebooks and may no longer be necessary. CIVP-18444
-
-    Returns
-    -------
-    The USER_VISIBLE_LOGS logger
-    """
-    directory = os.path.dirname(USER_VISIBLE_LOGS)
-    if not os.path.exists(directory):
-        os.makedirs(directory)
-
-    # python2 and 3 compatible way of opening a file
-    open(USER_VISIBLE_LOGS, 'a').close()
-
-    logger = logging.getLogger('USER_VISIBLE_LOGS')
-    logger.setLevel(logging.ERROR)
-    logger.propagate = False
-    handler = logging.FileHandler(USER_VISIBLE_LOGS)
-    formatter = logging.Formatter(
-        fmt='[%(levelname).1s %(asctime)s %(name)s] %(message)s',
-        datefmt="%H:%M:%S")
-    handler.setLevel(logging.ERROR)
-    handler.setFormatter(formatter)
-    logger.addHandler(handler)
-
-    return logger
-
-
-def log_file_has_logs(file_path):
-    return os.path.isfile(file_path) and os.path.getsize(file_path) > 0
