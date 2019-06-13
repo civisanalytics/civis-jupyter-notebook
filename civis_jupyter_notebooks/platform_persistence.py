@@ -11,6 +11,7 @@ import os
 import sys
 import subprocess
 import requests
+import time
 from io import open
 from subprocess import check_call
 from subprocess import CalledProcessError
@@ -80,6 +81,7 @@ def find_and_install_requirements(requirements_path):
 
 def pip_install(requirements_file):
     logger.info('Installing packages from %s' % requirements_file)
+    time.sleep(120)
     try:
         subprocess.check_output(
                 [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
