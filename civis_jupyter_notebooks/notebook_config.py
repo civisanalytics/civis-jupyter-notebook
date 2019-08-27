@@ -28,7 +28,7 @@ def find_and_install_requirements(requirements_path, c):
 
 def config_jupyter(c):
     # Jupyter Configuration
-    c.NotebookApp.ip = '0.0.0.0'
+    c.NotebookApp.ip = '*'
     c.NotebookApp.allow_origin = '*'
     c.NotebookApp.port = 8888
     c.NotebookApp.open_browser = False
