@@ -14,6 +14,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - Update notebook package to version 6.0.0 for Python3 notebooks (#49)
 - Update notebook package to version 5.7.8 for Python2 and R notebooks (#49)
 
+### Fixed
+- Fix issue with notebook ip address in config (#49)
+
 ## [1.0.0] - 2019-05-10
 
 ### Removed
