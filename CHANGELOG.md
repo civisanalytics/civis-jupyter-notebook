@@ -12,11 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [1.0.1] - 2019-08-28
 
 ### Changed
-- Update notebook package to version 6.0.0 for Python3 notebooks
-- Update notebook package to version 5.7.8 for Python2 and R notebooks
+- Update notebook package to version 6.0.0 for Python3 notebooks (#50)
+- Update notebook package to version 5.7.8 for Python2 and R notebooks (#50)
 
 ### Fixed
-- Fix issue with notebook ip address in config
+- Fix issue with notebook ip address in config (#50)
 
 ## [1.0.0] - 2019-05-10
 
