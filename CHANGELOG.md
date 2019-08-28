@@ -8,6 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - File logging. All logs will now be written to stdout/stderr streams. (#47)
 
+
+## [1.0.1] - 2019-08-28
+
+### Changed
+- Update notebook package to version 6.0.0 for Python3 notebooks
+- Update notebook package to version 5.7.8 for Python2 and R notebooks
+
+### Fixed
+- Fix issue with notebook ip address in config
+
 ## [1.0.0] - 2019-05-10
 
 ### Removed
