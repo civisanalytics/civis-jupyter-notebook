@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 - File logging. All logs will now be written to stdout/stderr streams. (#47)
 
 
-## [1.0.1] - 2019-08-28
+## [1.0.1] - 2019-09-03
 
 ### Changed
 - Update notebook package to version 6.0.0 for Python3 notebooks (#50)
