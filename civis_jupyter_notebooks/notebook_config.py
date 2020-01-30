@@ -1,7 +1,6 @@
 import json
 import os
 import signal
-from http.cookies import Morsel
 
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.git_utils import CivisGit
@@ -29,6 +28,7 @@ def find_and_install_requirements(requirements_path, c):
 
 
 def monkey_patch_jupyter_login_cookie():
+    from http.cookies import Morsel
     from notebook.auth import login
 
     class PatchedLoginHandler(login.LoginHandler):
@@ -38,6 +38,7 @@ def monkey_patch_jupyter_login_cookie():
             cookie_options = handler.settings.get('cookie_options', {})
             cookie_options.setdefault('httponly', True)
             cookie_options.setdefault('secure', True)
+            cookie_options.setdefault('samesite', 'None')
             # tornado <4.2 has a bug that considers secure==True as soon as
             # 'secure' kwarg is passed to set_secure_cookie
             if handler.settings.get('secure_cookie', handler.request.protocol == 'https'):
@@ -47,6 +48,8 @@ def monkey_patch_jupyter_login_cookie():
             handler.set_secure_cookie(handler.cookie_name, user_id, **cookie_options)
             return user_id
 
+    platform_persistence.logger.info('Monkey patching stuff')
+    Morsel._reserved['samesite'] = 'SameSite'
     login.LoginHandler = PatchedLoginHandler
 
 
@@ -59,7 +62,7 @@ def config_jupyter(c):
     c.NotebookApp.token = ''
     # c.NotebookApp.disable_check_xsrf = True
     # monkeypatch Morsel to allow SameSite cookies (only in Python 3.8+)
-    Morsel._reserved['samesite'] = 'SameSite'
+    # Morsel._reserved['samesite'] = 'SameSite'
     # c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
     # c.JupyterHub.cookie_options = dict(secure=True)
     # monkey_patch_jupyter_login_cookie()
