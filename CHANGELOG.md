@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ### Removed
 - File logging. All logs will now be written to stdout/stderr streams. (#47)
 
+## [1.0.2] - 2020-01-30
+### Removed
+- Remove Notebook XSRF check (#51)
 
 ## [1.0.1] - 2019-09-03
 
