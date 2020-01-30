@@ -37,7 +37,8 @@ def config_jupyter(c):
     # c.NotebookApp.disable_check_xsrf = True
     # monkeypatch Morsel to allow SameSite cookies (only in Python 3.8+)
     # Morsel._reserved['samesite'] = 'SameSite'
-    c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
+    # c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
+    c.JupyterHub.cookie_options = dict(secure=True)
     c.NotebookApp.tornado_settings = {
         'headers': {'Content-Security-Policy': "frame-ancestors *"},
         # 'cookie_options': {'secure': True, 'samesite': 'None'},
