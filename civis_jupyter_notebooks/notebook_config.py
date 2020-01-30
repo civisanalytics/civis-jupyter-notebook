@@ -38,9 +38,10 @@ def config_jupyter(c):
     # monkeypatch Morsel to allow SameSite cookies (only in Python 3.8+)
     # Morsel._reserved['samesite'] = 'SameSite'
     # c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
-    c.JupyterHub.cookie_options = dict(secure=True)
+    # c.JupyterHub.cookie_options = dict(secure=True)
     c.NotebookApp.tornado_settings = {
         'headers': {'Content-Security-Policy': "frame-ancestors *"},
+        'secure_cookie': True,
         # 'cookie_options': {'secure': True, 'samesite': 'None'},
     }
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
