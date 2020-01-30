@@ -32,8 +32,11 @@ def config_jupyter(c):
     c.NotebookApp.allow_origin = '*'
     c.NotebookApp.port = 8888
     c.NotebookApp.open_browser = False
-    c.NotebookApp.token = '<generated>'
-    c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
+    c.NotebookApp.token = ''
+    c.NotebookApp.tornado_settings = {
+        'headers': {'Content-Security-Policy': "frame-ancestors *"},
+        'cookie_options': {'secure': True},
+    }
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
     c.NotebookApp.nbserver_extensions = {
