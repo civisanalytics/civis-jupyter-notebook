@@ -1,6 +1,7 @@
 civis~=1.6
 requests~=2.18
 click~=6.7
+jupyter-core~=4.6.0
 notebook==6.0.0 ; python_version >= '3.5'
 notebook==5.7.8 ; python_version < '3.0'
 # Python 2 notebooks require notebook v5.7.8
