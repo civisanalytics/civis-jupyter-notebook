@@ -27,6 +27,28 @@ def find_and_install_requirements(requirements_path, c):
         platform_persistence.logger.error(error_msg)
 
 
+def monkey_patch_jupyter_login_cookie():
+    from notebook.auth import login
+
+    class PatchedLoginHandler(login.LoginHandler):
+        @classmethod
+        def set_login_cookie(cls, handler, user_id=None):
+            """Call this on handlers to set the login cookie for success"""
+            cookie_options = handler.settings.get('cookie_options', {})
+            cookie_options.setdefault('httponly', True)
+            cookie_options.setdefault('secure', True)
+            # tornado <4.2 has a bug that considers secure==True as soon as
+            # 'secure' kwarg is passed to set_secure_cookie
+            if handler.settings.get('secure_cookie', handler.request.protocol == 'https'):
+                cookie_options.setdefault('secure', True)
+            cookie_options.setdefault('path', handler.base_url)
+            print(cookie_options)
+            handler.set_secure_cookie(handler.cookie_name, user_id, **cookie_options)
+            return user_id
+
+    login.LoginHandler = PatchedLoginHandler
+
+
 def config_jupyter(c):
     # Jupyter Configuration
     c.NotebookApp.ip = '0.0.0.0'
@@ -39,10 +61,11 @@ def config_jupyter(c):
     # Morsel._reserved['samesite'] = 'SameSite'
     # c.JupyterHub.tornado_settings["cookie_options"] = dict(secure=True)
     # c.JupyterHub.cookie_options = dict(secure=True)
+    monkey_patch_jupyter_login_cookie()
     c.NotebookApp.tornado_settings = {
         'headers': {'Content-Security-Policy': "frame-ancestors *"},
         'secure_cookie': True,
-        # 'cookie_options': {'secure': True, 'samesite': 'None'},
+        'cookie_options': {'secure': True, 'samesite': 'None'},
     }
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
