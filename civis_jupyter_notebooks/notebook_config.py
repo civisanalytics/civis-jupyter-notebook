@@ -1,5 +1,6 @@
 import os
 import signal
+from http.cookies import Morsel
 
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.git_utils import CivisGit
@@ -34,9 +35,11 @@ def config_jupyter(c):
     c.NotebookApp.open_browser = False
     c.NotebookApp.token = ''
     # c.NotebookApp.disable_check_xsrf = True
+    # monkeypatch Morsel to allow SameSite cookies (only in Python 3.8+)
+    Morsel._reserved['samesite'] = 'SameSite'
     c.NotebookApp.tornado_settings = {
         'headers': {'Content-Security-Policy': "frame-ancestors *"},
-        'cookie_options': {'secure': True},
+        'cookie_options': {'secure': True, 'samesite': 'None'},
     }
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
