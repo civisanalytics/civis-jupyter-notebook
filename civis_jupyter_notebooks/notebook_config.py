@@ -33,6 +33,7 @@ def config_jupyter(c):
     c.NotebookApp.port = 8888
     c.NotebookApp.open_browser = False
     c.NotebookApp.token = ''
+    c.NotebookApp.disable_check_xsrf = True
     c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
     c.NotebookApp.allow_root = True
