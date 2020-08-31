@@ -227,7 +227,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('sys.executable')
     def test_pip_install_failure_raises_notebookmanagementerror(self, executable, check_output):
         check_output.side_effect = subprocess.CalledProcessError(returncode=1, cmd='cmd', output=b'installation error')
-        with self.assertRaisesRegexp(NotebookManagementError, 'installation error'):
+        with self.assertRaisesRegex(NotebookManagementError, 'installation error'):
             platform_persistence.pip_install('/path/requirements.txt')
 
 
