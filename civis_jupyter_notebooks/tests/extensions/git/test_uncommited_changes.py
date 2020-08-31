@@ -1,16 +1,8 @@
 import unittest
-import six
-import pkg_resources
-import platform
+from unittest.mock import patch, MagicMock
 
 from civis_jupyter_notebooks.extensions.git.uncommitted_changes import UncommittedChangesHandler
 from civis_jupyter_notebooks.git_utils import CivisGitError
-
-if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
-        == pkg_resources.parse_version('3.4')):
-    from mock import patch, MagicMock
-else:
-    from unittest.mock import patch, MagicMock
 
 
 class UncommittedChangesHandlerTest(unittest.TestCase):

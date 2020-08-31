@@ -3,19 +3,11 @@ import subprocess
 import nbformat
 import requests
 import unittest
+from unittest.mock import ANY, MagicMock, patch
 import logging
-import six
-import pkg_resources
-import platform
 
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
-
-if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
-        == pkg_resources.parse_version('3.4')):
-    from mock import ANY, MagicMock, patch
-else:
-    from unittest.mock import ANY, MagicMock, patch
 
 TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
