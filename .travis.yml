@@ -6,7 +6,6 @@ services:
 dist: xenial
 language: python
 python:
-  - "2.7"
   - "3.5"
   - "3.6"
   - "3.7"
@@ -21,10 +20,5 @@ script:
   - |
     if [ ${TRAVIS_PYTHON_VERSION} = 3.7 ]
     then
-        ./tests/run_docker_tests.sh tests/python3/Dockerfile
-    fi
-  - |
-    if [ ${TRAVIS_PYTHON_VERSION} = 2.7 ]
-    then
-        ./tests/run_docker_tests.sh tests/python2/Dockerfile
+        ./tests/run_docker_tests.sh tests/Dockerfile
     fi
