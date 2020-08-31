@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 ### Removed
-- File logging. All logs will now be written to stdout/stderr streams. (#47)
+- Support for Python 2.7 (#52)
 
 ## [1.0.2] - 2020-01-30
 ### Removed
@@ -20,6 +20,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Fix issue with notebook ip address in config (#50)
+
+### Removed
+- File logging. All logs will now be written to stdout/stderr streams. (#47)
 
 ## [1.0.0] - 2019-05-10
 
