@@ -185,7 +185,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     def test_will_regenerate_api_client(self, mock_client):
         platform_persistence.get_client()
-        mock_client.assert_called_with(resources='all')
+        mock_client.assert_called()
 
     @patch('os.path.isfile')
     @patch('os.path.isdir')
