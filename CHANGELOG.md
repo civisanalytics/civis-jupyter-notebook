@@ -8,6 +8,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.0.0] - 2020-09-??
 
+### Added
+- Compatibility with Pandas 1.x (#52)
+
 ### Removed
 - Support for Python 2.7 (#52)
 
