@@ -1,17 +1,9 @@
 import unittest
-import six
+from unittest.mock import patch, ANY
 import os
-import pkg_resources
-import platform
 from traitlets.config.loader import Config
 
 from civis_jupyter_notebooks import notebook_config, platform_persistence
-
-if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
-        == pkg_resources.parse_version('3.4')):
-    from mock import patch, ANY
-else:
-    from unittest.mock import patch, ANY
 
 
 class NotebookConfigTest(unittest.TestCase):

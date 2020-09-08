@@ -5,10 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
+
+## [2.0.0] - 2020-09-08
+
+### Added
+- Compatibility with Pandas 1.x (#52)
+
 ### Removed
-- File logging. All logs will now be written to stdout/stderr streams. (#47)
+- Support for Python 2.7 (#52)
 
 ## [1.0.2] - 2020-01-30
+
 ### Removed
 - Remove Notebook XSRF check (#51)
 
@@ -20,6 +27,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ### Fixed
 - Fix issue with notebook ip address in config (#50)
+
+### Removed
+- File logging. All logs will now be written to stdout/stderr streams. (#47)
 
 ## [1.0.0] - 2019-05-10
 

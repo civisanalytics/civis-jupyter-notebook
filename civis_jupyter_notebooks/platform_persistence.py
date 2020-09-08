@@ -139,9 +139,7 @@ def generate_and_save_preview(url, os_path):
 
 def get_client():
     """ This gets a client that knows about our notebook endpoints """
-
-    # TODO: Simplify this once the notebooks endpoints are in the client
-    return civis.APIClient(resources='all')
+    return civis.APIClient()
 
 
 class NotebookManagementError(Exception):

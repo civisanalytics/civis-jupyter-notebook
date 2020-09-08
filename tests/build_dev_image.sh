@@ -1,5 +1,5 @@
 #!/bin/bash
 
-cp tests/python3/Dockerfile .
+cp tests/Dockerfile .
 docker build -t py3 .
 rm Dockerfile

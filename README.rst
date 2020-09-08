@@ -11,6 +11,8 @@ Usage
 
 In your ``Dockerfile``, put the following code at the end::
 
+    ENV DEFAULT_KERNEL <your kernel>  # set to python3 or ir
+
     RUN pip install civis-jupyter-notebook && \
         civis-jupyter-notebooks-install
 
@@ -19,14 +21,13 @@ In your ``Dockerfile``, put the following code at the end::
     ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
     RUN chmod +x /tini
 
-    ENV DEFAULT_KERNEL <your kernel>  # set to one of python3, python2 or ir
     EXPOSE 8888
     WORKDIR /root/work
     ENTRYPOINT ["/tini", "--"]
     CMD ["civis-jupyter-notebooks-start"]
 
 Here you need to replace ``<your kernel>`` with the name of your kernel (e.g.,
-one of ``python2``, ``python3``, or ``ir``). Note that your Dockerfile must use
+``python3`` or ``ir``). Note that your Dockerfile must use
 ``root`` as the default user.
 
 See the `example`_ Docker image for more details.

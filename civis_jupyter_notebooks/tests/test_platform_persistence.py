@@ -3,19 +3,11 @@ import subprocess
 import nbformat
 import requests
 import unittest
+from unittest.mock import ANY, MagicMock, patch
 import logging
-import six
-import pkg_resources
-import platform
 
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.platform_persistence import NotebookManagementError
-
-if (six.PY2 or pkg_resources.parse_version('.'.join(platform.python_version_tuple()[0:2]))
-        == pkg_resources.parse_version('3.4')):
-    from mock import ANY, MagicMock, patch
-else:
-    from unittest.mock import ANY, MagicMock, patch
 
 TEST_NOTEBOOK_PATH = '/path/to/notebook.ipynb'
 TEST_PLATFORM_OBJECT_ID = '1914'
@@ -193,7 +185,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('civis.APIClient')
     def test_will_regenerate_api_client(self, mock_client):
         platform_persistence.get_client()
-        mock_client.assert_called_with(resources='all')
+        mock_client.assert_called_with()
 
     @patch('os.path.isfile')
     @patch('os.path.isdir')
@@ -235,7 +227,7 @@ class PlatformPersistenceTest(unittest.TestCase):
     @patch('sys.executable')
     def test_pip_install_failure_raises_notebookmanagementerror(self, executable, check_output):
         check_output.side_effect = subprocess.CalledProcessError(returncode=1, cmd='cmd', output=b'installation error')
-        with self.assertRaisesRegexp(NotebookManagementError, 'installation error'):
+        with self.assertRaisesRegex(NotebookManagementError, 'installation error'):
             platform_persistence.pip_install('/path/requirements.txt')
 
 
