@@ -7,12 +7,9 @@ def read(fname):
         return _in.read()
 
 
-__version__ = None
-exec(read('civis_jupyter_notebooks/version.py'))
-
 setup(
     name="civis-jupyter-notebook",
-    version=__version__,
+    version="2.1.0",
     author="Civis Analytics Inc",
     author_email="opensource@civisanalytics.com",
     url="https://www.civisanalytics.com",
@@ -20,6 +17,7 @@ setup(
                  "Platform Jupyter notebooks."),
     packages=find_packages(),
     long_description=read('README.rst'),
+    long_description_content_type="text/x-rst",
     include_package_data=True,
     license="BSD-3",
     install_requires=read('requirements.txt').strip().split('\n'),

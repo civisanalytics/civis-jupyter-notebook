@@ -9,11 +9,11 @@ import civis
 import nbformat
 import os
 import sys
-import subprocess
+import subprocess  # nosec
 import requests
 from io import open
-from subprocess import check_call
-from subprocess import CalledProcessError
+from subprocess import check_call  # nosec
+from subprocess import CalledProcessError  # nosec
 from civis_jupyter_notebooks import log_utils
 
 
@@ -81,7 +81,7 @@ def find_and_install_requirements(requirements_path):
 def pip_install(requirements_file):
     logger.info('Installing packages from %s' % requirements_file)
     try:
-        subprocess.check_output(
+        subprocess.check_output(  # nosec
                 [sys.executable, '-m', 'pip', 'install', '-r', requirements_file],
                 stderr=subprocess.STDOUT
                 )
@@ -126,7 +126,7 @@ def generate_and_save_preview(url, os_path):
     d, fname = os.path.split(os_path)
     logger.info('Rendering notebook to HTML')
     try:
-        check_call(['jupyter', 'nbconvert', '--to', 'html', fname], cwd=d)
+        check_call(['jupyter', 'nbconvert', '--to', 'html', fname], cwd=d)  # nosec
     except CalledProcessError as e:
         raise NotebookManagementError('nbconvert failed to convert notebook file to html: {}'.format(repr(e)))
 

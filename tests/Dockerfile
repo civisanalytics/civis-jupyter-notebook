@@ -1,10 +1,10 @@
-FROM python:3.7
+FROM python:3.10.2-slim-buster
 
 COPY ./requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt
 
 # Add Tini
-ENV TINI_VERSION v0.16.1
+ENV TINI_VERSION v0.19.0
 ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
 RUN chmod +x /tini
 

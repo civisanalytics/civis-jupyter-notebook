@@ -1,8 +1,9 @@
 civis-jupyter-notebook
 ======================
 
-.. image:: https://travis-ci.org/civisanalytics/civis-jupyter-notebook.svg?branch=master
-    :target: https://travis-ci.org/civisanalytics/civis-jupyter-notebook
+.. image:: https://circleci.com/gh/civisanalytics/civis-jupyter-notebook.svg?style=shield
+   :target: https://circleci.com/gh/civisanalytics/civis-jupyter-notebook
+   :alt: CircleCI Builds
 
 A tool to enable any Docker image to be used with Civis Platform Jupyter notebooks.
 
@@ -17,7 +18,7 @@ In your ``Dockerfile``, put the following code at the end::
         civis-jupyter-notebooks-install
 
     # Add Tini
-    ENV TINI_VERSION v0.16.1
+    ENV TINI_VERSION v0.19.0
     ADD https://github.com/krallin/tini/releases/download/${TINI_VERSION}/tini /tini
     RUN chmod +x /tini
 
@@ -68,7 +69,7 @@ to make sure it is working properly.
 Contributing
 ------------
 
-See ``CONTIBUTING.md`` for information about contributing to this project.
+See ``CONTRIBUTING.md`` for information about contributing to this project.
 
 License
 -------

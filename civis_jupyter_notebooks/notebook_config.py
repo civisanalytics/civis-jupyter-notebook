@@ -28,11 +28,11 @@ def find_and_install_requirements(requirements_path, c):
 
 def config_jupyter(c):
     # Jupyter Configuration
-    c.NotebookApp.ip = '0.0.0.0'
+    c.NotebookApp.ip = '0.0.0.0'  # nosec
     c.NotebookApp.allow_origin = '*'
     c.NotebookApp.port = 8888
     c.NotebookApp.open_browser = False
-    c.NotebookApp.token = ''
+    c.NotebookApp.token = ''  # nosec
     c.NotebookApp.disable_check_xsrf = True
     c.NotebookApp.tornado_settings = {'headers': {'Content-Security-Policy': "frame-ancestors *"}}
     c.NotebookApp.terminado_settings = {'shell_command': ['bash']}
