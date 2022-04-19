@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [2.1.0] - 2022-04-20
 
 ### Added
-- Added support for Python 3.9 and 3.10 (#55)
+- Added support for Python 3.8, 3.9, and 3.10 (#55)
 
 ### Changed
 - Updated core and dev dependencies (#55)
