@@ -1,4 +1,4 @@
-FROM python:3.10.2-slim-buster
+FROM python:3.10.4-slim-buster
 
 COPY ./requirements.txt /root/requirements.txt
 RUN pip install -r /root/requirements.txt

@@ -8,10 +8,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [2.1.0] - 2022-03-08
 
+### Added
+- Added support for Python 3.9 and 3.10 (#55)
+
 ### Changed
-- Dropped support for Python 3.5 and 3.6, added support for Python 3.9 and 3.10 (#55)
+
 - Updated core and dev dependencies (#55)
 - Switched from TravisCI to CircleCI (#55)
+
+### Removed
+- Dropped support for Python 3.5 and 3.6 (#55)
 
 ## [2.0.0] - 2020-09-08
 
