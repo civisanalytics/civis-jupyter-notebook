@@ -3,7 +3,7 @@ requests>=2.18
 click>=6.7
 jupyter-core>=4.6.0
 notebook>=6.4.1
-tornado
+tornado>=6.1.0
 civis-jupyter-extensions>=1.1.0
 GitPython>=2.1
 importlib-metadata >= 1.0 ; python_version < '3.8'
