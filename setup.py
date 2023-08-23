@@ -9,7 +9,7 @@ def read(fname):
 
 setup(
     name="civis-jupyter-notebook",
-    version="2.1.0",
+    version="2.1.1",
     author="Civis Analytics Inc",
     author_email="opensource@civisanalytics.com",
     url="https://www.civisanalytics.com",

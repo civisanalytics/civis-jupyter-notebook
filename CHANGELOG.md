@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [2.1.1] - 2023-08-22
+
+### Changed
+- Updated to require notebook < 7.0, as [jupiter-notebook 7.0](https://jupyter-notebook.readthedocs.io/en/stable/migrate_to_notebook7.html) introduced breaking changes.
+
 ## [2.1.0] - 2022-04-25
 
 ### Added

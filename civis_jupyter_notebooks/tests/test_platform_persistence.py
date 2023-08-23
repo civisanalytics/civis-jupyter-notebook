@@ -48,7 +48,7 @@ class PlatformPersistenceTest(unittest.TestCase):
         platform_persistence.get_client().notebooks.get.return_value.notebook_url = url
         platform_persistence.get_client().notebooks.get.return_value.requirements_url = None
         platform_persistence.initialize_notebook_from_platform(TEST_NOTEBOOK_PATH)
-        rg.assert_called_with(url)
+        rg.assert_called_with(url, timeout=60)
         requirements.assert_not_called()
 
     @patch('os.makedirs')

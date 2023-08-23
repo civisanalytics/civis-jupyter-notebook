@@ -24,7 +24,7 @@ def initialize_notebook_from_platform(notebook_path):
     notebook_model = client.notebooks.get(os.environ['PLATFORM_OBJECT_ID'])
 
     logger.info('Pulling contents of notebook file from S3')
-    r = requests.get(notebook_model.notebook_url)
+    r = requests.get(notebook_model.notebook_url, timeout=60)
     if r.status_code != 200:
         raise NotebookManagementError('Failed to pull down notebook file from S3')
     notebook = nbformat.reads(r.content, nbformat.NO_CONVERT)
@@ -53,7 +53,7 @@ def initialize_notebook_from_platform(notebook_path):
 
 def __pull_and_load_requirements(url, notebook_path):
     logger.info('Pulling down the requirements file')
-    r = requests.get(url)
+    r = requests.get(url, timeout=60)
 
     if r.status_code != 200:
         raise NotebookManagementError('Failed to pull down requirements.txt file from S3')
@@ -117,7 +117,7 @@ def save_notebook(url, os_path):
     """ Push raw notebook to S3 """
     with open(os_path, 'rb') as nb_file:
         logger.info('Pushing latest notebook file to S3')
-        requests.put(url, data=nb_file.read())
+        requests.put(url, data=nb_file.read(), timeout=60)
         logger.info('Notebook file updated')
 
 
@@ -133,7 +133,7 @@ def generate_and_save_preview(url, os_path):
     preview_path = os.path.splitext(os_path)[0] + '.html'
     with open(preview_path, 'rb') as preview_file:
         logger.info('Pushing latest notebook preview to S3')
-        requests.put(url, data=preview_file.read())
+        requests.put(url, data=preview_file.read(), timeout=60)
         logger.info('Notebook preview updated')
 
 
