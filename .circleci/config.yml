@@ -8,11 +8,10 @@ jobs:
         type: string
     docker:
       # Pick the highest Python 3.x version that this project is known to support
-      - image: cimg/python:3.11
+      - image: cimg/python:3.12
     steps:
       - checkout
       - run:
-          working_directory: ~/project/
           command: << parameters.command-run >>
 
   build-python:
@@ -24,75 +23,81 @@ jobs:
     steps:
       - checkout
       - run:
+          # Intentionally not using CircleCI's "python/install-packages" step,
+          # because we don't want to install packages from any requirements.txt/pyproject.toml
+          # just yet.
           # Test that we can build a source distribution that can correctly
           # install from clean slate.
           name: Build source distribution and install package from it
-          working_directory: ~/project/
           command: |
               pip install --progress-bar off --upgrade pip setuptools build && \
               python -m build && \
               pip install dist/`ls dist/ | grep .whl`
       - run:
           name: Install the full development requirements
-          working_directory: ~/project/
-          command: pip install --progress-bar off -r dev-requirements.txt
-      - run:
-          name: Show installed Python packages
-          command: pip list -v
+          command: |
+            pip install --progress-bar off -e ".[dev]" && \
+            pip list -v
       - run:
           name: Run python tests
-          working_directory: ~/
-          # Avoid being able to import the package by relative import.
-          # Test code by importing the *installed* package in site-packages.
-          command: |
-              pytest -vv --durations=0 --junitxml=/tmp/testxml/report.xml project/civis_jupyter_notebooks
+          command: pytest --durations=0 --junitxml=/tmp/testxml/report.xml
       - store_test_results:
           path: /tmp/testxml/
-      - setup_remote_docker
-      - run:
-          name: Test Docker image build
-          working_directory: ~/project/
-          command: |
-            if [ << parameters.python-version >> = 3.11 ]
-            then
-                ./tests/run_docker_tests.sh tests/Dockerfile
-            fi
+
+  build-docker-image:
+    docker:
+      - image: cimg/python:3.12
+    steps:
+      - checkout
+      - run: ./tests/run_docker_tests.sh tests/Dockerfile
 
 workflows:
   version: 2
   build-and-test:
     jobs:
       - pre-build:
+          name: bandit
+          command-run: |
+            pip install --progress-bar off -e ".[dev]" && \
+            bandit --version && \
+            bandit -r src -x tests
+      - pre-build:
+          name: black
+          command-run: |
+            pip install --progress-bar off -e ".[dev]" && \
+            black --check src tests
+      - pre-build:
           name: flake8
           command-run: |
-            pip install -r dev-requirements.txt && \
-            flake8 civis_jupyter_notebooks
+            pip install --progress-bar off -e ".[dev]" && \
+            flake8 src tests
+      - pre-build:
+          name: pip-audit
+          command-run: |
+            pip install --progress-bar off -e ".[dev]" && \
+            pip-audit --version && \
+            pip-audit --skip-editable
       - pre-build:
           name: twine
           command-run: |
-            pip install --upgrade twine build && \
+            pip install --progress-bar off -e ".[dev]" && \
             python -m build && \
             twine check dist/`ls dist/ | grep .tar.gz` && \
             twine check dist/`ls dist/ | grep .whl`
-      - pre-build:
-          name: safety
-          command-run: |
-            pip install -e . && \
-            pip install --upgrade safety && \
-            safety --version && \
-            safety check
-      - pre-build:
-          name: bandit
-          command-run: |
-            pip install --upgrade bandit && \
-            bandit --version && \
-            bandit -r civis_jupyter_notebooks -x civis_jupyter_notebooks/tests
       - build-python:
           requires:
-            - flake8
-            - twine
-            - safety
             - bandit
+            - black
+            - flake8
+            - pip-audit
+            - twine
           matrix:
             parameters:
-              python-version: ["3.8", "3.9", "3.10", "3.11"]
+              python-version: ["3.9", "3.10", "3.11", "3.12"]
+      - build-docker-image:
+          requires:
+            - bandit
+            - black
+            - flake8
+            - pip-audit
+            - twine

@@ -7,24 +7,24 @@ from git.exc import GitCommandError
 from git import Repo
 from civis_jupyter_notebooks.git_utils import CivisGit, CivisGitError
 
-REPO_URL = 'http://www.github.com/civisanalytics.foo.git'
-REPO_MOUNT_PATH = '/root/work'
-GIT_REPO_REF = 'master'
+REPO_URL = "http://www.github.com/civisanalytics.foo.git"
+REPO_MOUNT_PATH = "/root/work"
+GIT_REPO_REF = "master"
 
 
 class GitUtilsTest(unittest.TestCase):
 
     def setUp(self):
-        os.environ['GIT_REPO_URL'] = REPO_URL
-        os.environ['GIT_REPO_REF'] = GIT_REPO_REF
+        os.environ["GIT_REPO_URL"] = REPO_URL
+        os.environ["GIT_REPO_REF"] = GIT_REPO_REF
         logging.disable(logging.INFO)
 
-    @patch('civis_jupyter_notebooks.git_utils.Repo.clone_from')
+    @patch("civis_jupyter_notebooks.git_utils.Repo.clone_from")
     def test_clone_repository_throws_error(self, repo_clone):
-        repo_clone.side_effect = GitCommandError('clone', 'failed')
+        repo_clone.side_effect = GitCommandError("clone", "failed")
         self.assertRaises(CivisGitError, lambda: CivisGit().clone_repository())
 
-    @patch('civis_jupyter_notebooks.git_utils.Repo.clone_from')
+    @patch("civis_jupyter_notebooks.git_utils.Repo.clone_from")
     def test_clone_repository_succeeds(self, repo_clone):
         repo_clone.return_value = MagicMock(spec=Repo)
         CivisGit(repo_mount_path=REPO_MOUNT_PATH).clone_repository()
@@ -32,7 +32,7 @@ class GitUtilsTest(unittest.TestCase):
         repo_clone.assert_called_with(REPO_URL, REPO_MOUNT_PATH)
         repo_clone.return_value.git.checkout.assert_called_with(GIT_REPO_REF)
 
-    @patch('os.environ.get')
+    @patch("os.environ.get")
     def test_is_git_enabled_returns_false(self, env):
         env.return_value = None
         cg = CivisGit()
@@ -43,9 +43,9 @@ class GitUtilsTest(unittest.TestCase):
 
     def test_has_uncommitted_changes(self):
         def custom_side_effect(arg):
-            if arg == 'HEAD':
+            if arg == "HEAD":
                 return []
-            return ['foo.py']
+            return ["foo.py"]
 
         cg = CivisGit()
         cg.repo = MagicMock(spec=Repo)
@@ -63,9 +63,9 @@ class GitUtilsTest(unittest.TestCase):
     def test_has_uncommitted_changes_throws_error(self):
         cg = CivisGit()
         cg.repo = MagicMock(spec=Repo)
-        cg.repo().index.diff = MagicMock(side_effect=GitCommandError('diff', 'failed'))
+        cg.repo().index.diff = MagicMock(side_effect=GitCommandError("diff", "failed"))
         self.assertRaises(CivisGitError, lambda: cg.has_uncommitted_changes())
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     unittest.main()
