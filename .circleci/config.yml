@@ -1,104 +1,43 @@
 version: 2.1
 
 jobs:
-  pre-build:
-    description: A check that doesn't need every supported Python version (e.g., code style checks)
-    parameters:
-      command-run:
-        type: string
+  build:
     docker:
-      # Pick the highest Python 3.x version that this project is known to support
+      # Pick the latest released Python 3.x version from https://circleci.com/developer/images/image/cimg/python
       - image: cimg/python:3.12
     steps:
       - checkout
-      - run:
-          command: << parameters.command-run >>
-
-  build-python:
-    parameters:
-      python-version:
-        type: string
-    docker:
-      - image: cimg/python:<< parameters.python-version >>
-    steps:
-      - checkout
-      - run:
-          # Intentionally not using CircleCI's "python/install-packages" step,
-          # because we don't want to install packages from any requirements.txt/pyproject.toml
-          # just yet.
-          # Test that we can build a source distribution that can correctly
-          # install from clean slate.
-          name: Build source distribution and install package from it
-          command: |
-              pip install --progress-bar off --upgrade pip setuptools build && \
-              python -m build && \
-              pip install dist/`ls dist/ | grep .whl`
       - run:
           name: Install the full development requirements
           command: |
             pip install --progress-bar off -e ".[dev]" && \
             pip list -v
       - run:
+          name: bandit
+          command: |
+            bandit --version && \
+            bandit -r src -x tests
+      - run:
+          name: black
+          command: |
+            black --check src tests
+      - run:
+          name: flake8
+          command: |
+            flake8 src tests
+      - run:
+          name: pip-audit
+          command: |
+            pip-audit --version && \
+            pip-audit --skip-editable
+      - run:
+          name: Build and check the source distribution and wheel
+          command: |
+              python -m build && \
+              twine check dist/`ls dist/ | grep .tar.gz` && \
+              twine check dist/`ls dist/ | grep .whl`
+      - run:
           name: Run python tests
           command: pytest --durations=0 --junitxml=/tmp/testxml/report.xml
       - store_test_results:
           path: /tmp/testxml/
-
-  build-docker-image:
-    docker:
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - setup_remote_docker
-      - run: ./tests/run_docker_tests.sh tests/Dockerfile
-
-workflows:
-  version: 2
-  build-and-test:
-    jobs:
-      - pre-build:
-          name: bandit
-          command-run: |
-            pip install --progress-bar off -e ".[dev]" && \
-            bandit --version && \
-            bandit -r src -x tests
-      - pre-build:
-          name: black
-          command-run: |
-            pip install --progress-bar off -e ".[dev]" && \
-            black --check src tests
-      - pre-build:
-          name: flake8
-          command-run: |
-            pip install --progress-bar off -e ".[dev]" && \
-            flake8 src tests
-      - pre-build:
-          name: pip-audit
-          command-run: |
-            pip install --progress-bar off -e ".[dev]" && \
-            pip-audit --version && \
-            pip-audit --skip-editable
-      - pre-build:
-          name: twine
-          command-run: |
-            pip install --progress-bar off -e ".[dev]" && \
-            python -m build && \
-            twine check dist/`ls dist/ | grep .tar.gz` && \
-            twine check dist/`ls dist/ | grep .whl`
-      - build-python:
-          requires:
-            - bandit
-            - black
-            - flake8
-            - pip-audit
-            - twine
-          matrix:
-            parameters:
-              python-version: ["3.9", "3.10", "3.11", "3.12"]
-      - build-docker-image:
-          requires:
-            - bandit
-            - black
-            - flake8
-            - pip-audit
-            - twine

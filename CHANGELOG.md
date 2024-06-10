@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
-## [2.2.0] - 2024-06-04
+## [2.2.0] - 2024-06-12
 
 ### Added
 - Added support for Python 3.12.
