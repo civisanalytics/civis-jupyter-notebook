@@ -1,12 +1,9 @@
-FROM python:3.10.4-slim-buster
+FROM python:3.12.3-slim
 
 RUN apt-get update \
  && apt-get install -y --no-install-recommends git \
  && apt-get purge -y --auto-remove \
  && rm -rf /var/lib/apt/lists/*
-
-COPY ./requirements.txt /root/requirements.txt
-RUN pip install -r /root/requirements.txt
 
 # Add Tini
 ENV TINI_VERSION v0.19.0

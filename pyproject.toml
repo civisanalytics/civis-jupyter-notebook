@@ -57,7 +57,7 @@ script-files = [
 where = [ "src" ]
 
 [tool.setuptools.package-data]
-civis_jupyter_notebooks = ["assets/**/*"]
+civis_jupyter_notebooks = ["assets/**/*", "assets/.*"]
 
 [tool.pytest.ini_options]
 addopts = "--strict-markers --ignore=tests/test_ext.py -vv"
