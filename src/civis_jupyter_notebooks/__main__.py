@@ -1,9 +1,11 @@
 import os
 import shutil
-import pkg_resources
 import subprocess  # nosec
 
 import click
+
+
+_THIS_DIR = os.path.abspath(os.path.dirname(__file__))
 
 
 @click.command()
@@ -36,7 +38,7 @@ def cli():
 
     # copy code
     def _copy(src, dst):
-        src = pkg_resources.resource_filename(__name__, os.path.join(*src))
+        src = os.path.join(_THIS_DIR, *src)
         dst = os.path.expanduser(os.path.join(*dst))
         shutil.copy(src, dst)
 
@@ -53,9 +55,7 @@ def cli():
     _copy(("assets", "civis_client_config.py"), ("~", ".ipython"))
 
     # copy frontend extensions
-    frontend_extensions = pkg_resources.resource_listdir(
-        __name__, os.path.join("assets", "extensions")
-    )
+    frontend_extensions = os.listdir(os.path.join(_THIS_DIR, "assets", "extensions"))
     for fe_ext in frontend_extensions:
         _copy(("assets", "extensions", fe_ext), ("~", ".jupyter", "extensions"))
 
