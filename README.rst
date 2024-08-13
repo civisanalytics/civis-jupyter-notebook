@@ -77,3 +77,6 @@ License
 BSD-3
 
 See ``LICENSE.md`` for details.
+
+The file [terminal.js](./src/civis_jupyter_notebooks/assets/extensions/terminal.js) contains code from [jupyter/nbclassic](https://github.com/jupyter/nbclassic/blob/b6257e966f47951b49f661bd129de1fc794079c2/nbclassic/static/base/js/utils.js).
+As noted in the file, that code is Copyright (c) Jupyter Development Team and has a BSD-3 license.
