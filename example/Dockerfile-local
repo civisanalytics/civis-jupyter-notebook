@@ -1,5 +1,5 @@
 # An example Dockerfile for local development.
-# This will install civis-jupyter-notebook from disk from than from PyPI.
+# This will install civis-jupyter-notebook from disk rather than from PyPI.
 FROM python:3.10.4-slim-buster
 
 ENV DEFAULT_KERNEL=python3
