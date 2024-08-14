@@ -1,6 +1,9 @@
 civis-jupyter-notebook
 ======================
 
+[![PyPI version](https://badge.fury.io/py/civis-jupyter-notebook.svg)](https://pypi.org/project/civis-jupyter-notebook/)
+[![CircleCI Builds](https://circleci.com/gh/civisanalytics/civis-jupyter-notebook.svg?style=shield)](https://circleci.com/gh/civisanalytics/civis-jupyter-notebook)
+
 A tool to enable any Docker image to be used with Civis Platform Jupyter notebooks.
 
 Usage
