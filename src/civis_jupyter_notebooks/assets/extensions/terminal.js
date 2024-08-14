@@ -52,6 +52,8 @@ define(['base/js/namespace'], function(Jupyter) {
       help: 'Open Terminal',
       handler: function(env) {
         if (terminalLoading) {
+          // Avoid creating a bunch of terminals if the user clicks
+          // multiple times before the redirect happens.
           return;
         }
 
