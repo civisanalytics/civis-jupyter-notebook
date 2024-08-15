@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [2.2.1] - 2024-08-15
+### Fixed
+- Fixed terminal access.
+
 ## [2.2.0] - 2024-06-12
 
 ### Added

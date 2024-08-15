@@ -1,3 +1,5 @@
+# An example Dockerfile for local development.
+# This will install civis-jupyter-notebook from disk rather than from PyPI.
 FROM python:3.10.4-slim-buster
 
 ENV DEFAULT_KERNEL=python3
@@ -7,7 +9,8 @@ RUN apt-get update \
  && apt-get purge -y --auto-remove \
  && rm -rf /var/lib/apt/lists/*
 
-RUN pip install --no-cache-dir civis-jupyter-notebook && \
+COPY . /civis-jupyter-notebook
+RUN pip install --no-cache-dir /civis-jupyter-notebook && \
     civis-jupyter-notebooks-install
 
 # Add Tini
