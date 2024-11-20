@@ -1,6 +1,6 @@
 import os
 import shutil
-import subprocess  # nosec
+# import subprocess  # nosec
 
 import click
 
@@ -30,11 +30,11 @@ def cli():
             pass
 
     # enable civisjupyter extension
-    for cmd in [
-        "jupyter nbextension install --py civis_jupyter_ext",
-        "jupyter nbextension enable --py civis_jupyter_ext",
-    ]:
-        subprocess.check_call(cmd, shell=True)  # nosec
+    # for cmd in [
+    #     "jupyter nbextension install --py civis_jupyter_ext",
+    #     "jupyter nbextension enable --py civis_jupyter_ext",
+    # ]:
+    #     subprocess.check_call(cmd, shell=True)  # nosec
 
     # copy code
     def _copy(src, dst):
@@ -60,10 +60,10 @@ def cli():
         _copy(("assets", "extensions", fe_ext), ("~", ".jupyter", "extensions"))
 
     # install and enable nbextensions
-    subprocess.check_call(
-        "jupyter nbextension install ~/.jupyter/extensions", shell=True
-    )  # nosec
-    for extension in frontend_extensions:
-        ext_name = os.path.splitext(extension)[0]
-        cmd = "jupyter nbextension enable extensions/{}".format(ext_name)
-        subprocess.check_call(cmd, shell=True)  # nosec
+    # subprocess.check_call(
+    #     "jupyter nbextension install ~/.jupyter/extensions", shell=True
+    # )  # nosec
+    # for extension in frontend_extensions:
+    #     ext_name = os.path.splitext(extension)[0]
+    #     cmd = "jupyter nbextension enable extensions/{}".format(ext_name)
+    #     subprocess.check_call(cmd, shell=True)  # nosec
