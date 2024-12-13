@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import subprocess  # nosec
+# import subprocess  # nosec
 
 import click
 
@@ -56,17 +56,17 @@ def cli():
     _copy(("assets", "civis_client_config.py"), ("~", ".ipython"))
 
     # copy frontend extensions
-    frontend_extensions = os.listdir(os.path.join(_THIS_DIR, "assets", "extensions"))
-    for fe_ext in frontend_extensions:
-        _copy(("assets", "extensions", fe_ext), ("~", ".jupyter", "extensions"))
-    subprocess.check_call(
-        (
-            "pip install "
-            "/civis-jupyter-notebook/src/civis_jupyter_notebooks/assets/extensions/"  # fmt: skip # noqa: E501
-            "civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl"
-        ),
-        shell=True,
-    )  # nosec # noqa: E501
+    # frontend_extensions = os.listdir(os.path.join(_THIS_DIR, "assets", "extensions"))
+    # for fe_ext in frontend_extensions:
+    #     _copy(("assets", "extensions", fe_ext), ("~", ".jupyter", "extensions"))
+    # subprocess.check_call(
+    #     (
+    #         "pip install "
+    #         "/civis-jupyter-notebook/src/civis_jupyter_notebooks/assets/extensions/"  # fmt: skip # noqa: E501
+    #         "civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl"
+    #     ),
+    #     shell=True,
+    # )  # nosec # noqa: E501
     # install and enable nbextensions
     # subprocess.check_call(
     #     "jupyter nbextension install ~/.jupyter/extensions", shell=True

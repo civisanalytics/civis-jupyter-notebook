@@ -47,6 +47,13 @@ def config_jupyter(c):
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ["DEFAULT_KERNEL"]
 
+    # Install civis notebook v7 extension package
+    package_path = os.path.join(
+        os.path.dirname(__file__),
+        "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
+    )
+    os.system(f"pip install {package_path}")
+
 
 def stage_new_notebook(notebook_file_path):
     civis_git = CivisGit()
