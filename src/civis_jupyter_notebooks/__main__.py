@@ -62,11 +62,11 @@ def cli():
     subprocess.check_call(
         (
             "pip install "
-            "/civis-jupyter-notebook/src/civis_jupyter_notebooks/assets/extensions/"  # fmt: skip
+            "/civis-jupyter-notebook/src/civis_jupyter_notebooks/assets/extensions/"  # fmt: skip # noqa: E501
             "civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl"
         ),
         shell=True,
-    )  # nosec
+    )  # nosec # noqa: E501
     # install and enable nbextensions
     # subprocess.check_call(
     #     "jupyter nbextension install ~/.jupyter/extensions", shell=True
