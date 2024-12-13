@@ -36,14 +36,14 @@ def config_jupyter(c):
     c.NotebookApp.open_browser = False
     c.NotebookApp.token = ""  # nosec
     c.NotebookApp.disable_check_xsrf = True
-    c.NotebookApp.tornado_settings = {
-        "headers": {"Content-Security-Policy": "frame-ancestors *"}
-    }
-    c.NotebookApp.terminado_settings = {"shell_command": ["bash"]}
+    # c.NotebookApp.tornado_settings = {
+    #     "headers": {"Content-Security-Policy": "frame-ancestors *"}
+    # }
+    # c.NotebookApp.terminado_settings = {"shell_command": ["bash"]}
     c.NotebookApp.allow_root = True
-    c.NotebookApp.nbserver_extensions = {
-        "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
-    }
+    # c.NotebookApp.nbserver_extensions = {
+    #     "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
+    # }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ["DEFAULT_KERNEL"]
 
@@ -60,7 +60,7 @@ def civis_setup(c):
 
     nb_file_path = os.environ.get("NOTEBOOK_FILE_PATH", "notebook.ipynb").strip("/")
     notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
-    c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
+    # c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
 
     get_notebook(notebook_full_path)
     stage_new_notebook(nb_file_path)
