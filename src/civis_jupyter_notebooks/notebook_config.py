@@ -50,7 +50,9 @@ def config_jupyter(c):
     # Install civis notebook v7 extension package
     package_path = os.path.join(
         os.path.dirname(__file__),
-        "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
+        # "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
+        "assets/extensions/civis_jupyter_notebook-2.2.1-py3-none-any.whl",
+
     )
     os.system(f"pip install {package_path}")
 

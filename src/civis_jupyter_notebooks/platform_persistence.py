@@ -21,10 +21,18 @@ import requests
 
 def initialize_notebook_from_platform(notebook_path):
     """This runs on startup to initialize the notebook"""
+    logger.info("OBJECT_ID!")
+    logger.info(os.environ["PLATFORM_OBJECT_ID"])
+    logger.info("notebook!_path")
+    logger.info(notebook_path)
     logger.info("Retrieving notebook information from Platform")
     client = get_client()
+    logger.info("Client retrieved")
+    logger.info(client)
+    print(client)
     notebook_model = client.notebooks.get(os.environ["PLATFORM_OBJECT_ID"])
-
+    logger.info("Notebook information retrieved")
+    logger.info(notebook_model)
     logger.info("Pulling contents of notebook file from S3")
     r = requests.get(notebook_model.notebook_url, timeout=60)
     if r.status_code != 200:
