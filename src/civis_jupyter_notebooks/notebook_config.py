@@ -4,7 +4,6 @@ import signal
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.git_utils import CivisGit
 
-
 ROOT_DIR = os.path.expanduser(os.path.join("~", "work"))
 
 
@@ -52,7 +51,6 @@ def config_jupyter(c):
         os.path.dirname(__file__),
         "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
         # "assets/extensions/civis_jupyter_notebook-2.2.1-py3-none-any.whl",
-
     )
     os.system(f"pip install {package_path}")  # nosec
 
