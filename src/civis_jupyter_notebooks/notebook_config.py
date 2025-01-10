@@ -30,28 +30,28 @@ def find_and_install_requirements(requirements_path, c):
 
 def config_jupyter(c):
     # Jupyter Configuration
-    c.NotebookApp.ip = "0.0.0.0"  # nosec
-    c.NotebookApp.allow_origin = "*"
-    c.NotebookApp.port = 8888
-    c.NotebookApp.open_browser = False
-    c.NotebookApp.token = ""  # nosec
-    c.NotebookApp.disable_check_xsrf = True
-    c.NotebookApp.tornado_settings = {
+    c.ServerApp.ip = "0.0.0.0"  # nosec
+    c.ServerApp.allow_origin = "*"
+    c.ServerApp.port = 8888
+    c.ServerApp.open_browser = False
+    c.ServerApp.token = ""  # nosec
+    c.ServerApp.disable_check_xsrf = True
+    c.ServerApp.tornado_settings = {
         "headers": {"Content-Security-Policy": "frame-ancestors *"}
     }
-    c.NotebookApp.terminado_settings = {"shell_command": ["bash"]}
-    c.NotebookApp.allow_root = True
-    c.NotebookApp.nbserver_extensions = {
-        "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
-    }
+    c.ServerApp.terminado_settings = {"shell_command": ["bash"]}
+    c.ServerApp.allow_root = True
+    # c.NotebookApp.nbserver_extensions = {
+    #     "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
+    # }
     c.FileContentsManager.post_save_hook = platform_persistence.post_save
     c.MultiKernelManager.default_kernel_name = os.environ["DEFAULT_KERNEL"]
 
     # Install civis notebook v7 extension package
     package_path = os.path.join(
         os.path.dirname(__file__),
-        # "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
-        "assets/extensions/civis_jupyter_notebook-2.2.1-py3-none-any.whl",
+        "assets/extensions/civis_jupyter_notebook_extensions-0.1.0-py3-none-any.whl",
+        # "assets/extensions/civis_jupyter_notebook-2.2.1-py3-none-any.whl",
 
     )
     os.system(f"pip install {package_path}")
@@ -69,7 +69,8 @@ def civis_setup(c):
 
     nb_file_path = os.environ.get("NOTEBOOK_FILE_PATH", "notebook.ipynb").strip("/")
     notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
-    c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
+    # c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
+    c.ServerApp.default_url = "/notebooks/{}".format(nb_file_path)
 
     get_notebook(notebook_full_path)
     stage_new_notebook(nb_file_path)
