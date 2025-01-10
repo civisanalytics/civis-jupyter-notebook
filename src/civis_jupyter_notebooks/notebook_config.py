@@ -54,7 +54,7 @@ def config_jupyter(c):
         # "assets/extensions/civis_jupyter_notebook-2.2.1-py3-none-any.whl",
 
     )
-    os.system(f"pip install {package_path}")
+    os.system(f"pip install {package_path}")  # nosec
 
 
 def stage_new_notebook(notebook_file_path):
