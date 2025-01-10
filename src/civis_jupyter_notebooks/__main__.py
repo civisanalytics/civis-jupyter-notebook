@@ -1,7 +1,7 @@
 import os
 import shutil
 
-import subprocess  # nosec
+# import subprocess  # nosec
 
 import click
 
