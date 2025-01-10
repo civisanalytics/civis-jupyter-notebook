@@ -1,0 +1,5 @@
+{
+  "packageManager": "python",
+  "packageName": "civis_jupyter_notebook_extensions",
+  "uninstallInstructions": "Use your Python package manager (pip, conda, etc.) to uninstall the package civis_jupyter_notebook_extensions"
+}

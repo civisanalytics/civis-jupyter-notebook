@@ -1,0 +1,185 @@
+{
+  "jupyter.lab.toolbars": {
+    "Notebook": [
+      {
+        "name": "open-command-palette",
+        "command": "apputils:activate-command-palette", 
+        "icon": "ui-components:palette"
+      },
+      {
+        "name": "open-terminal",
+        "command": "terminal:open", 
+        "icon": "ui-components:terminal"
+      }, 
+      {
+        "name": "civis-open-terminal",
+        "icon": "ui-components:terminal",
+        "command": "civis:open-terminal"
+      }
+    ]
+  },
+  "jupyter.lab.menus": {
+    "main": [
+      {
+      "id": "jp-mainmenu-run",
+      "disabled": true
+      }, 
+      {
+        "id": "jp-mainmenu-kernel",
+        "items": [
+          {
+            "command": "kernelmenu:change",
+            "disabled": true
+          }, 
+          {
+            "command": "kernelmenu:shutdownAll",
+            "disabled": true
+          }
+        ]
+      }, 
+      {
+        "id": "jp-mainmenu-file",
+        "items": [
+          {
+            "type": "submenu",
+            "submenu": {
+                "id": "jp-mainmenu-file-new"
+            },
+            "disabled": true
+          },
+          {
+            "command": "docmanager:save-as",
+            "rank": 0
+          },
+          {
+            "command": "filemenu:close-and-cleanup",
+            "rank": 10
+        },
+          {
+            "command": "notebook:create-new",
+            "disabled": true
+          },
+          {
+            "command": "filemenu:create-console",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:open",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:save",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:save-all",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:close",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:clone",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:rename",
+            "disabled": true
+          },
+          {
+            "command":"application:close", 
+            "disabled": true
+          },
+          {
+            "command": "docmanager:reload",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:duplicate",
+            "disabled": true
+          },
+          {
+            "command": "docmanager:restore-rename",
+            "disabled":true
+          },
+          {
+            "command": "docmanager:restore-checkpoint",
+            "disabled":true
+          },
+          {
+            "command": "filebrowser:open-path",
+            "disabled": true
+          },
+          {
+            "command": "jp-mainmenu-file-new",
+            "disabled": true
+          },
+          {
+            "command": "launcher:create",
+            "disabled": true
+          },
+          {
+            "command": "application:close-all",
+            "disabled": true
+          },
+          {
+            "command": "hub:control-panel", 
+            "disabled":true
+          },
+          {
+            "type": "submenu",
+            "submenu": {
+              "id": "jp-mainmenu-file-workspaces"
+            },
+            "disabled": true
+          },
+          {
+            "command": "workspace-ui",
+            "disabled": true
+          }, 
+          {
+            "command": "filemenu:shutdown",
+            "disabled": true
+          }, 
+          {
+            "command": "filemenu:logout",
+            "disabled": true
+          }
+        ]
+      }, 
+      {
+        "id": "jp-mainmenu-tabs",
+        "disabled": true
+      }, 
+      {
+        "id": "jp-mainmenu-view",
+        "items": [
+          {
+            "type": "submenu",
+            "submenu": {
+                "id": "jp-mainmenu-view-appearance"
+            },
+            "disabled": true
+          },
+          {
+            "command": "apputils:display-notifications",
+            "disabled": true
+          },
+          {
+            "command": "logconsole:open",
+            "disabled": true
+          }
+        ]
+      }
+    ]
+  },
+  
+  "title": "Civis Jupyter Notebook Extensions",
+  "type": "object",
+  "properties": {},
+  "additionalProperties": false,
+  "startMode": "single"
+
+
+}
