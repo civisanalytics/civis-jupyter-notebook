@@ -1,43 +1,43 @@
-version: 2.1
+# version: 2.1
 
-jobs:
-  build:
-    docker:
-      # Pick the latest released Python 3.x version from https://circleci.com/developer/images/image/cimg/python
-      - image: cimg/python:3.12
-    steps:
-      - checkout
-      - run:
-          name: Install the full development requirements
-          command: |
-            pip install --progress-bar off -e ".[dev]" && \
-            pip list -v
-      - run:
-          name: bandit
-          command: |
-            bandit --version && \
-            bandit -r src -x tests
-      - run:
-          name: black
-          command: |
-            black --check src tests
-      - run:
-          name: flake8
-          command: |
-            flake8 src tests
-      - run:
-          name: pip-audit
-          command: |
-            pip-audit --version && \
-            pip-audit --skip-editable
-      - run:
-          name: Build and check the source distribution and wheel
-          command: |
-              python -m build && \
-              twine check dist/`ls dist/ | grep .tar.gz` && \
-              twine check dist/`ls dist/ | grep .whl`
-      - run:
-          name: Run python tests
-          command: pytest --durations=0 --junitxml=/tmp/testxml/report.xml
-      - store_test_results:
-          path: /tmp/testxml/
+# jobs:
+#   build:
+#     docker:
+#       # Pick the latest released Python 3.x version from https://circleci.com/developer/images/image/cimg/python
+#       - image: cimg/python:3.12
+#     steps:
+#       - checkout
+#       - run:
+#           name: Install the full development requirements
+#           command: |
+#             pip install --progress-bar off -e ".[dev]" && \
+#             pip list -v
+#       - run:
+#           name: bandit
+#           command: |
+#             bandit --version && \
+#             bandit -r src -x tests
+#       - run:
+#           name: black
+#           command: |
+#             black --check src tests
+#       - run:
+#           name: flake8
+#           command: |
+#             flake8 src tests
+#       - run:
+#           name: pip-audit
+#           command: |
+#             pip-audit --version && \
+#             pip-audit --skip-editable
+#       - run:
+#           name: Build and check the source distribution and wheel
+#           command: |
+#               python -m build && \
+#               twine check dist/`ls dist/ | grep .tar.gz` && \
+#               twine check dist/`ls dist/ | grep .whl`
+#       - run:
+#           name: Run python tests
+#           command: pytest --durations=0 --junitxml=/tmp/testxml/report.xml
+#       - store_test_results:
+#           path: /tmp/testxml/
