@@ -114,6 +114,7 @@
             "@jupyterlab/workspaces:commands",
             "@jupyterlab/workspaces-extension:sidebar",
             "@jupyterlab/workspaces-extension:menu",
+            "@jupyterlab/console-extension",
             "@jupyterlab/application-extension:mode-switch",
             "@jupyterlab/application-extension:property-inspector",
             "@jupyterlab/debugger-extension",
