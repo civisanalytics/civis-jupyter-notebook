@@ -43,7 +43,9 @@ def cli():
         dst = os.path.expanduser(os.path.join(*dst))
         shutil.copy(src, dst)
 
-    _copy(("assets", "jupyter_notebook_config.py"), ("~", ".jupyter"))
+    # _copy(("assets", "jupyter_notebook_config.py"), ("~", ".jupyter"))
+    _copy(("assets", "jupyter_server_config.py"), ("~", ".jupyter"))
+
     _copy(("assets", "custom.css"), ("~", ".jupyter", "custom"))
     _copy(("assets", "custom.js"), ("~", ".jupyter", "custom"))
     for ext in ["eot", "woff", "svg", "ttf"]:

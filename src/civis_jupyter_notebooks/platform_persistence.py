@@ -25,14 +25,18 @@ def initialize_notebook_from_platform(notebook_path):
     client = get_client()
     notebook_model = client.notebooks.get(os.environ["PLATFORM_OBJECT_ID"])
     logger.info("Pulling contents of notebook file from S3")
+    logger.info(f"Notebook URL: {notebook_model}")
     r = requests.get(notebook_model.notebook_url, timeout=60)
+    logger.info(f"Response!: {r}")
     if r.status_code != 200:
         raise NotebookManagementError("Failed to pull down notebook file from S3")
     notebook = nbformat.reads(r.content, nbformat.NO_CONVERT)
-
+    logger.info(f"Notebook: {notebook}")
+   
     s3_notebook_new = (
         notebook.get("metadata", {}).get("civis", {}).get("new_notebook", False)
     )
+    logger.info(f"New notebook: {s3_notebook_new}")
     if s3_notebook_new:
         notebook.metadata.pop("civis")
 
@@ -42,6 +46,7 @@ def initialize_notebook_from_platform(notebook_path):
     if not git_notebook_exists or not s3_notebook_new:
         logger.info("Restoring notebook file from S3")
         directory = os.path.dirname(notebook_path)
+        logger.info(f"Directory: {directory}")
         if not os.path.exists(directory):
             os.makedirs(directory)
 

@@ -35,10 +35,10 @@ def config_jupyter(c):
     c.ServerApp.open_browser = False
     c.ServerApp.token = ""  # nosec
     c.ServerApp.disable_check_xsrf = True
-    c.ServerApp.tornado_settings = {
-        "headers": {"Content-Security-Policy": "frame-ancestors *"}
-    }
-    c.ServerApp.terminado_settings = {"shell_command": ["bash"]}
+    # c.ServerApp.tornado_settings = {
+    #     "headers": {"Content-Security-Policy": "frame-ancestors *"}
+    # }
+    # c.ServerApp.terminado_settings = {"shell_command": ["bash"]}
     c.ServerApp.allow_root = True
     # c.NotebookApp.nbserver_extensions = {
     #     "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
