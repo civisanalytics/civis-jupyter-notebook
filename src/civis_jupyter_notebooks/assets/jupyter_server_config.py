@@ -1,4 +1,3 @@
-
 from civis_jupyter_notebooks import notebook_config
 
 c = get_config()  # noqa

@@ -32,7 +32,7 @@ def initialize_notebook_from_platform(notebook_path):
         raise NotebookManagementError("Failed to pull down notebook file from S3")
     notebook = nbformat.reads(r.content, nbformat.NO_CONVERT)
     logger.info(f"Notebook: {notebook}")
-   
+
     s3_notebook_new = (
         notebook.get("metadata", {}).get("civis", {}).get("new_notebook", False)
     )
