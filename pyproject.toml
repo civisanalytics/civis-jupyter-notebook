@@ -11,10 +11,10 @@ requires-python = ">= 3.9"
 authors = [ { name = "Civis Analytics", email = "opensource@civisanalytics.com" } ]
 license = { text = "BSD-3-Clause" }
 dependencies = [
-    "civis >= 2.2.0",
+    "civis >= 2.4.0",
     "click >= 6.0",
-    "GitPython >= 3.1.44",
-    "jupyterlab >= 4.3.4",
+    "GitPython = 3.1.43",
+    "jupyterlab >= 4.2.6",
     "requests >= 2.32.3",
     "tornado >= 6.4.2",
 ]
