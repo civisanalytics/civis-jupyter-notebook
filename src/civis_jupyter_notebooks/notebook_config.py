@@ -31,15 +31,17 @@ def config_jupyter(c):
     # Jupyter Configuration
     c.ServerApp.ip = "0.0.0.0"  # nosec
     c.ServerApp.allow_origin = "*"
+    c.ServerApp.root_dir = ROOT_DIR
     c.ServerApp.port = 8888
     c.ServerApp.open_browser = False
-    c.ServerApp.token = ""  # nosec
+    # c.ServerApp.token = ""  # nosec
+    c.IdentityProvider.token = ""  # nosec
     c.ServerApp.disable_check_xsrf = True
-
+    c.ServerApp.allow_external_kernels = True
     c.ServerApp.tornado_settings = {
         "headers": {"Content-Security-Policy": "frame-ancestors *"}
     }
-    # c.ServerApp.terminado_settings = {"shell_command": ["bash"]}
+    c.ServerApp.terminado_settings = {"shell_command": ["bash"]}
     c.ServerApp.allow_root = True
     # c.NotebookApp.nbserver_extensions = {
     #     "civis_jupyter_notebooks.extensions.git.uncommitted_changes": True
