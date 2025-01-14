@@ -73,7 +73,7 @@ def civis_setup(c):
     # c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
     # c.ServerApp.default_url = "/notebooks/{}".format(nb_file_path)
     # c.ServerApp.default_url = "/doc/workspaces/auto-s/tree/{}".format(nb_file_path)
-    c.ServerApp.default_url = format(nb_file_path)
+    # c.LabApp.default_url = "/lab/tree/{}".format(nb_file_path)
     get_notebook(notebook_full_path)
     stage_new_notebook(nb_file_path)
 
