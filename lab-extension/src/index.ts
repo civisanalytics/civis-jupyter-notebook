@@ -17,7 +17,7 @@ import {
 import { TerminalManager, TerminalAPI } from '@jupyterlab/services';
 import { Terminal } from '@jupyterlab/terminal';
 // import { ITerminal } from '@jupyterlab/services/lib/terminal/terminal';
-// import { Widget } from '@lumino/widgets';
+import { Widget } from '@lumino/widgets';
 import { MainAreaWidget} from '@jupyterlab/apputils';
 
 // import { NotebookActions } from '@jupyterlab/notebook';
@@ -303,10 +303,10 @@ const plugin: JupyterFrontEndPlugin<void> = {
       }
     });
     // create a widget to hold the close terminal button
-    // const civisTerminalToolbarWidget = new Widget();
-    // civisTerminalToolbarWidget.id = 'civis-terminal-toolbar';
-    // civisTerminalToolbarWidget.title.label = 'Terminal Toolbar';
-    // civisTerminalToolbarWidget.node.appendChild(closeTerminalButton.node);
+    const civisTerminalToolbarWidget = new Widget();
+    civisTerminalToolbarWidget.id = 'civis-terminal-toolbar';
+    civisTerminalToolbarWidget.title.label = 'Terminal Toolbar';
+    civisTerminalToolbarWidget.node.appendChild(closeTerminalButton.node);
     const manager = new TerminalManager();
 
     // commands.addCommand('civis:init-screen-settings', {
@@ -374,14 +374,18 @@ const plugin: JupyterFrontEndPlugin<void> = {
             );
           }
           // add the terminal toolbar to the terminal widget
-          // terminal.node.appendChild(civisTerminalToolbarWidget.node);
+          terminal.node.appendChild(civisTerminalToolbarWidget.node);
           const terminalPanelWidget = new MainAreaWidget({
             content: terminal
           });
           // close the dialog box and open the terminal in the main area
           terminalMessage.reject();
           terminalMessage.dispose();
-          app.shell.add(terminalPanelWidget, 'main');
+          console.log('app')
+          console.log(app)
+          console.log('app.shell')
+          console.log(app.shell)
+          app.shell.add(terminalPanelWidget);
         } catch (error) {
           // to do: add better error handling, including error message to Notifications
           // notifications: https://github.com/jupyterlab/extension-examples/tree/main/notifications
