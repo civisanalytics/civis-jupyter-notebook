@@ -4,5 +4,5 @@ set -e
 
 # exec jupyter notebook $*
 # exec jupyter lab $*
-exec jupyter-lab --LabApp.default_url='/doc/tree/notebook.ipynb' 
-
+# exec jupyter-lab --LabApp.default_url='/doc/tree/notebook.ipynb' 
+exec jupyter lab --notebook-dir=/root/work
