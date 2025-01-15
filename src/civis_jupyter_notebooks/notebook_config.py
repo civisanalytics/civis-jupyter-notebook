@@ -1,10 +1,15 @@
 import os
 import signal
 
+import civis
+
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.git_utils import CivisGit
 
+
 ROOT_DIR = os.path.expanduser(os.path.join("~", "work"))
+
+LOG = civis.civis_logger()
 
 
 def get_notebook(notebook_full_path):
@@ -70,6 +75,10 @@ def civis_setup(c):
 
     nb_file_path = os.environ.get("NOTEBOOK_FILE_PATH", "notebook.ipynb").strip("/")
     notebook_full_path = os.path.join(ROOT_DIR, nb_file_path)
+    LOG.info("ROOT_DIR: %s", ROOT_DIR)
+    LOG.info("nb_file_path: %s", nb_file_path)
+    LOG.info("notebook_full_path: %s", notebook_full_path)
+
     # c.NotebookApp.default_url = "/notebooks/{}".format(nb_file_path)
     # c.ServerApp.default_url = "/notebooks/{}".format(nb_file_path)
     c.ServerApp.default_url = "/doc/tree/{}".format(nb_file_path)
