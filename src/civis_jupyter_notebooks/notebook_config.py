@@ -33,7 +33,7 @@ def config_jupyter(c):
     c.ServerApp.allow_origin = "*"
     c.ServerApp.root_dir = ROOT_DIR
     c.ServerApp.port = 8888
-    c.ServerApp.open_browser = False
+    c.ServerApp.open_browser = True
     # c.ServerApp.token = ""  # nosec
     c.IdentityProvider.token = ""  # nosec
     c.ServerApp.disable_check_xsrf = True

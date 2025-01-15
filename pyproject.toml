@@ -37,6 +37,7 @@ dev = [
     "build == 1.2.1",
     "flake8 == 7.0.0",
     "pip-audit",  # Use the latest version
+    "prompt-toolkit >= 3.0.38",
     "pytest == 8.2.0",
     "twine == 5.0.0",
 ]
