@@ -354,6 +354,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
 
           const api = TerminalAPI;
           const terminalList = await api.listRunning();
+          console.log('terminalList', terminalList);  
           // commands.execute('application:toggle-header');
           // create widget to hold terminal toolbar and add it to MainAreaWidget
           // reference: https://github.com/jupyterlab/extension-examples/tree/main/custom-log-console
@@ -367,6 +368,7 @@ const plugin: JupyterFrontEndPlugin<void> = {
             );
           } else {
             const termPanel = await manager.startNew();
+            console.log('termPanel', termPanel);
             terminal = new Terminal(
               manager.connectTo({ model: termPanel.model })
             );
@@ -377,12 +379,14 @@ const plugin: JupyterFrontEndPlugin<void> = {
             content: terminal
           });
           // close the dialog box and open the terminal in the main area
+          terminalMessage.reject();
           terminalMessage.dispose();
           app.shell.add(terminalPanelWidget, 'main');
         } catch (error) {
           // to do: add better error handling, including error message to Notifications
           // notifications: https://github.com/jupyterlab/extension-examples/tree/main/notifications
           console.error('Error opening terminal:', error);
+          terminalMessage.reject();
           terminalMessage.dispose();
         }
 
