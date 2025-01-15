@@ -1,15 +1,13 @@
 import os
 import signal
 
-import civis
-
 from civis_jupyter_notebooks import platform_persistence
 from civis_jupyter_notebooks.git_utils import CivisGit
 
 
 ROOT_DIR = os.path.expanduser(os.path.join("~", "work"))
 
-LOG = civis.civis_logger()
+LOG = platform_persistence.logger
 
 
 def get_notebook(notebook_full_path):
