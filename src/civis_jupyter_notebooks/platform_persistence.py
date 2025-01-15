@@ -52,6 +52,17 @@ def initialize_notebook_from_platform(notebook_path):
 
         with open(notebook_path, mode="w", encoding="utf-8") as nb_file:
             nbformat.write(notebook, nb_file)
+    else:
+        logger.info("Creating a new, empty notebook")
+        directory = os.path.dirname(notebook_path)
+        logger.info(f"Directory: {directory}")
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+        with open(notebook_path, mode="w", encoding="utf-8") as nb_file:
+            nb_file.write(
+                '{\n  "cells": [],\n  "metadata": {},\n  "nbformat": 4,\n  "nbformat_minor": 2\n}\n'  # noqa: E501
+            )
+
 
     logger.info("Notebook file ready")
 
