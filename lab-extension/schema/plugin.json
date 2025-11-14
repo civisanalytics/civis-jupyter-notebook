@@ -7,11 +7,6 @@
         "icon": "ui-components:palette"
       },
       {
-        "name": "open-terminal",
-        "command": "terminal:open", 
-        "icon": "ui-components:terminal"
-      }, 
-      {
         "name": "civis-open-terminal",
         "icon": "ui-components:terminal",
         "command": "civis:open-terminal"

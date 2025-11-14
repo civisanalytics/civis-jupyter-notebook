@@ -50,8 +50,7 @@ CIVIS_API_KEY=<YOUR CIVIS API KEY>
 
 3. Build your image locally: `docker build -t test .`.
 4. Run the container: `docker run --rm -p 8888:8888 --env-file my.env test`.
-5. Access the notebook at the ip of your Docker host with port 8888 (e.g., `http://localhost:8888/notebooks/notebook.ipynb`).
-http://localhost:8888/doc/workspaces/auto-s/tree/notebook.ipynb
+5. Access the notebook at the ip of your Docker host with port 8888 (e.g., `http://localhost:8888/notebooks/notebook.ipynb`). Locally, if the notebook.ipynb file is not created, you can access Jupyter labs at http://localhost:8888/doc and create a new notebook.
 
 Integration Testing Code Changes with Civis Platform
 ----------------------------------------------------
